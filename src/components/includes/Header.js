@@ -1,16 +1,23 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import styled from "styled-components"
 import {Link} from "react-router-dom"
 
 export default function Header() {
+    const [isNav,setIsNav] = useState(false)
+    // useEffect(()=>{
+    //     setIsNav(false)
+    // },[])
+
+
+
   return (
     <>
 
             <Main>
-                <SectionLeft>
-                    <SectionNav>
-                        <SectionNavLink>
-                            <NavImage  src={require("../images/nav_icon.png")}alt="nav slider" />
+                <SectionLeft >
+                    <SectionNav >
+                        <SectionNavLink  >
+                            <NavImage onClick={()=>setIsNav(!isNav)} src={require("../images/nav_icon.png")}alt="nav slider" />
                         </SectionNavLink>
                         <SectionLogo>
                             <SectionHighlight>
@@ -38,28 +45,38 @@ export default function Header() {
                     </NavList>
                 </SectionRight>
             </Main>
-            <SectionMainNav>
+            <SectionMainNav className={isNav ? 'visible' :'hidden'}>
                 <SectionNavLeft>
+                    <LogStatus>
+                        <LogButton>Logout</LogButton>
+                    </LogStatus>
                     <SectionNavTop>
                         <ProfileImageContainer>
                             <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
                         </ProfileImageContainer>
                         <ProfileDetails>
                             <ProfileName>Nadeer</ProfileName>
-                            <ProfileEmail>Modnadeerrahman@gmail.com</ProfileEmail>
-                        </ProfileDetails>
-                        <SectionProfile>
-                            <ProfileLink>MY Profile</ProfileLink>
-                        </SectionProfile>
-                        <SectionOrder>
-                            <OrderLink>My Orders</OrderLink>
-                        </SectionOrder>
+                            <ProfileEmail>modnadeerrahman@gmail.com</ProfileEmail>
+                            <SectionProfile>
+                                <ProfileLink>view profile</ProfileLink>
+                            </SectionProfile>
+                        </ProfileDetails>  
                     </SectionNavTop>
                     <SectionNavBottom>
+                        <SectionOrder>
+                            <OrderLink>
+                                <TitleSpan>My Posts</TitleSpan> <SliderImage src={require("../images/scroldown.png")} alt = "slider Image"/>
+                            </OrderLink>
+                        </SectionOrder>
+                        <SectionOrder>
+                            <OrderLink>
+                            <TitleSpan>Create Post</TitleSpan> <SliderImage src={require("../images/scroldown.png")} alt = "slider Image"/>
+                            </OrderLink>
+                        </SectionOrder>
                        
                     </SectionNavBottom>
                 </SectionNavLeft>
-                <SectionNavRight></SectionNavRight>
+                <SectionNavRight onClick={()=>setIsNav(!isNav)}></SectionNavRight>
             </SectionMainNav>
 
     </>
@@ -189,31 +206,55 @@ width: 100%;
 
 `
 const SectionNavLeft = styled.div`
+padding: 40px 0;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
 width: 30%;
 background-color: white;
 `
 const SectionNavRight = styled.div`
 opacity:.2;
 width: 70%;
-background-color: grey;
+background-color: #6d6969;
 `
+const LogStatus = styled.div`
+display: flex;
+align-items: center;
+width: 80%;
+`
+const LogButton = styled(Link)`
+display: inline-block;
+color:#ffaa11;
+font-weight: 600;
+font-size: 20px;
+`
+
 const SectionNavTop = styled.div`
+margin-top: 60px;
 display: flex;
 align-items: center;
 justify-content: center;
 flex-direction: column;
 `
 const ProfileImageContainer = styled.div`
-width:200px;
-height: 200px;
+width:150px;
+height: 150px;
 display: flex;
 justify-content: center;
 align-items: center;
+border-radius: 50%;
+overflow: hidden;
+border: 1px solid #eee;
+margin-bottom: 30px;
 `
 const ProfileImage = styled.img`
 display: block;
-width: 80%;
-height: 80%;
+width: 98%;
+height: 98%;
+border-radius: 50%;
+
 `
 const ProfileDetails = styled.div`
 display: flex;
@@ -223,20 +264,62 @@ flex-direction: column;
 margin-bottom: 30px;
 `
 const ProfileName = styled.h1`
-font-size: 18px;
-font-weight: 700;
+color: #686868;
+font-weight: 600;
+font-size: 20px;
 text-align: center;
 `
 const ProfileEmail = styled.h2`
-font-size: 18px;
-font-weight: 700;
+color: #686868;
+font-weight: 600;
+font-size: 20px;
 text-align: center;
+margin: 10px 0 20px;
 
 `
 const SectionProfile = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
 
 `
-const ProfileLink = styled(Link)``
-const SectionOrder = styled.div``
-const OrderLink = styled(Link)``
-const SectionNavBottom = styled.div``
+const ProfileLink = styled(Link)`
+    display: block;
+    border-radius: 10px;
+    background-color: #0d66b9;
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 20px;
+    font-weight: 600;
+`
+const SectionNavBottom = styled.div`
+width: 90%;
+background-color: #eee;
+`
+const SectionOrder = styled.div`
+&:first-child{
+    border-bottom: 1px solid #727272;
+}
+`
+const OrderLink = styled(Link)`
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 20px;
+
+
+`
+const TitleSpan = styled.span`
+font-size: 16px;
+font-weight: 600;
+display: block;
+`
+const SliderImage = styled.img`
+display: block;
+width: 10px;
+transform: rotate(270deg);
+
+`
+
+
+

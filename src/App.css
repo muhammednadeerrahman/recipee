@@ -48,3 +48,9 @@ a{
 a:hover{
   opacity: .8;
 }
+div.visible{
+  display: flex;
+}
+div.hidden{
+  display: none;
+}
