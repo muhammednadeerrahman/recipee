@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <>
-
+        <Headermain>
             <Main>
                 <SectionLeft >
                     <SectionNav >
@@ -21,7 +21,7 @@ export default function Header() {
                         </SectionNavLink>
                         <SectionLogo>
                             <SectionHighlight>
-                                <SectionLogoLink>
+                                <SectionLogoLink to='/'>
                                     <LogoImage src={require("../images/logo.png")} alt ="logo" />
                                 </SectionLogoLink>
                             </SectionHighlight>
@@ -78,11 +78,16 @@ export default function Header() {
                 </SectionNavLeft>
                 <SectionNavRight onClick={()=>setIsNav(!isNav)}></SectionNavRight>
             </SectionMainNav>
-
+        </Headermain>
     </>
   )
 }
 
+
+const Headermain = styled.div`
+position: fixed;
+width: 100%;
+`
 
 const Main = styled.div`
 position: relative;
@@ -92,9 +97,10 @@ justify-content: space-between;
 align-items: center;
 padding: 0 30px;
 height:80px;
+width: 100%;
 `
 const SectionLeft = styled.div`
-width: 30%;
+width: 20%;
 display: flex;
 align-items: center;
 `
@@ -138,7 +144,7 @@ width: 100%;
 `
 const SectionMiddle = styled.div`
 width: 55%;
-background-color: #ffaf20;
+background-color: #ffbe4b;
 padding: 20px;
 border-radius:10px;
 
@@ -164,7 +170,7 @@ width: 80%;
 const SearchInput = styled.input`
 display:block;
 width:100%;
-background-color: #ffaf20;
+background-color: #ffbe4b;
 border: 0px;
 &:focus{
     outline: none;
@@ -184,13 +190,14 @@ align-items: center;
 const LoginButton = styled(Link)`
 margin-right: 20px;
 font-size: 20px;
-font-weight: 600;
+font-weight: 700;
 display: block;
+color: #381a5a;
 
 `
 const SignupButton = styled(Link)`
 padding: 12px 16px;
-background-color: #d39127;
+background-color: #381a5a;
 font-size: 20px;
 font-weight: 600;
 border-radius: 30px;
@@ -203,12 +210,11 @@ display: flex;
 z-index:1;
 position: absolute;
 width: 100%;
+height:700px;;
 
 `
 const SectionNavLeft = styled.div`
-padding: 40px 0;
 display: flex;
-justify-content: center;
 align-items: center;
 flex-direction: column;
 width: 30%;
@@ -222,6 +228,8 @@ background-color: #6d6969;
 const LogStatus = styled.div`
 display: flex;
 align-items: center;
+justify-content: flex-end;
+margin-top: 10px;
 width: 80%;
 `
 const LogButton = styled(Link)`
