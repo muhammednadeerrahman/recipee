@@ -5,7 +5,7 @@ import {Link} from "react-router-dom"
 export default function Header() {
   return (
     <>
-        <HeaderContainer>
+
             <Main>
                 <SectionLeft>
                     <SectionNav>
@@ -39,53 +39,36 @@ export default function Header() {
                 </SectionRight>
             </Main>
             <SectionMainNav>
-                <SectionNavTop>
-                    <ProfileImageContainer>
-                        <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
-                    </ProfileImageContainer>
-                    <ProfileDetails>
-                        <ProfileName>Nadeer</ProfileName>
-                        <ProfileEmail>Modnadeerrahman@gmail.com</ProfileEmail>
-                    </ProfileDetails>
-                    <SectionProfile>
-                        <ProfileLink></ProfileLink>
-                    </SectionProfile>
-                    <SectionOrder>
-                        <OrderLink></OrderLink>
-                    </SectionOrder>
-                </SectionNavTop>
-                <SectionNavBottom>
-                    <SectionCategories>
-                        <CategoryTitle></CategoryTitle>
-                        <CategoryLists>
-                            <Category>
-                                <CategoryCheckBox/><CategoryLabel> Dessert</CategoryLabel>
-                            </Category>
-                            <Category>
-                                <CategoryCheckBox/><CategoryLabel> Chinese</CategoryLabel>
-                            </Category>
-                            <Category>
-                                <CategoryCheckBox/><CategoryLabel> Indian</CategoryLabel>
-                            </Category>
-                            <Category>
-                                <CategoryCheckBox/><CategoryLabel> Arabian</CategoryLabel>
-                            </Category>
-                        </CategoryLists>
-                        <SectionFilter>
-                            <SectionButton>Filter</SectionButton>
-                        </SectionFilter>
-                    </SectionCategories>
-                </SectionNavBottom>
+                <SectionNavLeft>
+                    <SectionNavTop>
+                        <ProfileImageContainer>
+                            <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
+                        </ProfileImageContainer>
+                        <ProfileDetails>
+                            <ProfileName>Nadeer</ProfileName>
+                            <ProfileEmail>Modnadeerrahman@gmail.com</ProfileEmail>
+                        </ProfileDetails>
+                        <SectionProfile>
+                            <ProfileLink>MY Profile</ProfileLink>
+                        </SectionProfile>
+                        <SectionOrder>
+                            <OrderLink>My Orders</OrderLink>
+                        </SectionOrder>
+                    </SectionNavTop>
+                    <SectionNavBottom>
+                       
+                    </SectionNavBottom>
+                </SectionNavLeft>
+                <SectionNavRight></SectionNavRight>
             </SectionMainNav>
-        </HeaderContainer>
+
     </>
   )
 }
-const HeaderContainer = styled.div`
 
-`
 
 const Main = styled.div`
+position: relative;
 background-color:#ffaa11;
 display: flex;
 justify-content: space-between;
@@ -199,26 +182,61 @@ color:#fff ;
 
 `
 const SectionMainNav = styled.div`
-width: 30%;
+display: flex;
+z-index:1;
+position: absolute;
+width: 100%;
+
 `
-const SectionNavTop = styled.div``
-const ProfileImageContainer = styled.div``
-const ProfileImage = styled.img``
-const ProfileDetails = styled.div``
-const ProfileName = styled.h1``
-const ProfileEmail = styled.h2``
-const SectionProfile = styled.div``
+const SectionNavLeft = styled.div`
+width: 30%;
+background-color: white;
+`
+const SectionNavRight = styled.div`
+opacity:.2;
+width: 70%;
+background-color: grey;
+`
+const SectionNavTop = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+`
+const ProfileImageContainer = styled.div`
+width:200px;
+height: 200px;
+display: flex;
+justify-content: center;
+align-items: center;
+`
+const ProfileImage = styled.img`
+display: block;
+width: 80%;
+height: 80%;
+`
+const ProfileDetails = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+margin-bottom: 30px;
+`
+const ProfileName = styled.h1`
+font-size: 18px;
+font-weight: 700;
+text-align: center;
+`
+const ProfileEmail = styled.h2`
+font-size: 18px;
+font-weight: 700;
+text-align: center;
+
+`
+const SectionProfile = styled.div`
+
+`
 const ProfileLink = styled(Link)``
 const SectionOrder = styled.div``
 const OrderLink = styled(Link)``
 const SectionNavBottom = styled.div``
-const SectionCategories = styled.div``
-const CategoryTitle = styled.h1``
-const CategoryLists = styled.ul``
-const Category = styled.li``
-const CategoryCheckBox = styled.input``
-const CategoryLabel = styled.label``
-const SectionFilter = styled.div``
-const SectionButton = styled.button``
-
-
