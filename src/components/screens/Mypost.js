@@ -227,6 +227,7 @@ width: 100%;
 const DishImage = styled.img`
 width: 100%;
 display: inline-block;
+border-radius: 8px;
 `
 const FoodDetails = styled.div``
 const FoodNameContainer = styled.div`
