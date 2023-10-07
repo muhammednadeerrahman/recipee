@@ -5,8 +5,12 @@ import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
 import './App.css';
 import Dishes from "./components/screens/Dishes";
 import Dish from "./components/screens/Dish";
-import Orders from "./components/screens/Orders";
+import Mypost from "./components/screens/Mypost";
 import Header from "./components/includes/Header";
+import Login from "./components/screens/Login";
+import Signup from "./components/screens/Signup";
+import Createpost from "./components/screens/Createpost";
+import Profile from "./components/screens/Profile";
 
 function App() {
   return (
@@ -15,7 +19,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Dishes/>} />
           <Route path="/dish" element={<Dish/>} />
-          <Route path="/orders" element={<Orders/>} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/Signup" element={<Signup/>} />
+          <Route path="/mypost" element={<Mypost/>} />
+          <Route path="/createpost" element={<Createpost/>} />
+          <Route path="/profile" element={<Profile/>} />
 
         </Routes>
       </Router>

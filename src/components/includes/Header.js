@@ -40,15 +40,15 @@ export default function Header() {
                 </SectionMiddle>
                 <SectionRight>
                     <NavList>
-                        <LoginButton>Log in</LoginButton>
-                        <SignupButton>SignUp</SignupButton>
+                        <LoginButton to = "/login">Log in</LoginButton>
+                        <SignupButton to = "/signup">SignUp</SignupButton>
                     </NavList>
                 </SectionRight>
             </Main>
             <SectionMainNav className={isNav ? 'visible' :'hidden'}>
                 <SectionNavLeft>
                     <LogStatus>
-                        <LogButton>Logout</LogButton>
+                        <LogButton  to = "/login">Logout</LogButton>
                     </LogStatus>
                     <SectionNavTop>
                         <ProfileImageContainer>
@@ -58,19 +58,19 @@ export default function Header() {
                             <ProfileName>Nadeer</ProfileName>
                             <ProfileEmail>modnadeerrahman@gmail.com</ProfileEmail>
                             <SectionProfile>
-                                <ProfileLink>view profile</ProfileLink>
+                                <ProfileLink to ="profile">view profile</ProfileLink>
                             </SectionProfile>
                         </ProfileDetails>  
                     </SectionNavTop>
                     <SectionNavBottom>
                         <SectionOrder>
-                            <OrderLink>
-                                <TitleSpan>My Posts</TitleSpan> <SliderImage src={require("../images/scroldown.png")} alt = "slider Image"/>
+                            <OrderLink to="/mypost">
+                                <TitleSpan >My Posts</TitleSpan> <SliderImage src={require("../images/scroldown.png")} alt = "slider Image"/>
                             </OrderLink>
                         </SectionOrder>
                         <SectionOrder>
-                            <OrderLink>
-                            <TitleSpan>Create Post</TitleSpan> <SliderImage src={require("../images/scroldown.png")} alt = "slider Image"/>
+                            <OrderLink to="/createpost">
+                            <TitleSpan >Create Post</TitleSpan> <SliderImage src={require("../images/scroldown.png")} alt = "slider Image"/>
                             </OrderLink>
                         </SectionOrder>
                        
@@ -202,13 +202,15 @@ font-size: 20px;
 font-weight: 600;
 border-radius: 30px;
 display: block;
-color:#fff ;
+color:#ffbe4b ;
 
 `
 const SectionMainNav = styled.div`
 display: flex;
 z-index:1;
 position: absolute;
+left: 0;
+top: 0;
 width: 100%;
 height:700px;;
 
@@ -254,7 +256,7 @@ justify-content: center;
 align-items: center;
 border-radius: 50%;
 overflow: hidden;
-border: 1px solid #eee;
+border: 1px solid #ffaa11;
 margin-bottom: 30px;
 `
 const ProfileImage = styled.img`
@@ -276,6 +278,7 @@ color: #686868;
 font-weight: 600;
 font-size: 20px;
 text-align: center;
+color: #ffaa11;
 `
 const ProfileEmail = styled.h2`
 color: #686868;
@@ -294,8 +297,8 @@ align-items: center;
 const ProfileLink = styled(Link)`
     display: block;
     border-radius: 10px;
-    background-color: #0d66b9;
-    color: #fff;
+    background-color: #381a5a;
+    color: #ffaa11;
     padding: 10px 16px;
     font-size: 20px;
     font-weight: 600;
@@ -306,7 +309,7 @@ background-color: #eee;
 `
 const SectionOrder = styled.div`
 &:first-child{
-    border-bottom: 1px solid #727272;
+    border-bottom: 1px solid #381a5a;
 }
 `
 const OrderLink = styled(Link)`
@@ -314,6 +317,7 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 padding: 20px;
+color: #ffaa11;
 
 
 `

@@ -2,9 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function () {
+
+export default function Signup() {
   return (
-    <Container>
+<Container>
     <LeftContainer>
         <HeaderContainer>
             <Logo
@@ -15,16 +16,19 @@ export default function () {
     </LeftContainer>
     <RightContainer>
         <LoginContainer>
-            <LoginHeading>Login to your Account</LoginHeading>
-            <LoginInfo>Enter email and password to login</LoginInfo>
+            <LoginHeading>Register into Account</LoginHeading>
+            <LoginInfo>Create an account to acccess all the features</LoginInfo>
             <Form > 
                 <InputContainer>
-                    <TextInput type="email" placeholder="Email" />
+                    <TextInput type="text" placeholder="Name" />
+                </InputContainer>
+                <InputContainer>
+                    <TextInput type="email" placeholder="Email"  />
                 </InputContainer>
                 <InputContainer>
                     <TextInput type="password" placeholder="Password"  />
                 </InputContainer>
-                <LoginButton to="/signup">Signup Now</LoginButton>
+                <LoginButton to="/login">Log in</LoginButton>
 
                 <ButtonContainer>
                     <SubmitButton>Login</SubmitButton>
@@ -67,7 +71,7 @@ display: flex;
 align-items: flex-end;
 justify-content: center;
 border-radius: 20px;
-padding: 0 70px 70px;
+padding:70px 70px;
 background-color: #381a5a;
 `;
 const LoginContainer = styled.div`
