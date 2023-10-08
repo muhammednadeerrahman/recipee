@@ -41,7 +41,7 @@ export default function Header() {
                 <SectionRight>
                     <NavList>
                         <LoginButton to = "/login">Log in</LoginButton>
-                        <SignupButton to = "/signup">SignUp</SignupButton>
+                        <SignupButton to = "/signup">Sign up</SignupButton>
                     </NavList>
                 </SectionRight>
             </Main>
@@ -58,7 +58,7 @@ export default function Header() {
                             <ProfileName>Nadeer</ProfileName>
                             <ProfileEmail>modnadeerrahman@gmail.com</ProfileEmail>
                             <SectionProfile>
-                                <ProfileLink to ="profile">view profile</ProfileLink>
+                                <ProfileLink to ="/profile">view profile</ProfileLink>
                             </SectionProfile>
                         </ProfileDetails>  
                     </SectionNavTop>
@@ -200,9 +200,9 @@ padding: 12px 16px;
 background-color: #381a5a;
 font-size: 20px;
 font-weight: 600;
-border-radius: 30px;
+border-radius: 10px;
 display: block;
-color:#ffbe4b ;
+color: #ffaa11 ;
 
 `
 const SectionMainNav = styled.div`
