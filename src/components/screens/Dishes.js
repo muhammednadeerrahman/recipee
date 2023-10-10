@@ -1,24 +1,56 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import Helmet from "react-helmet"
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import Header from '../includes/Header'
+import axios from "axios"
 
 export default function Dishes() {
-	const [dishes , setDishes] = useState( {name:"nadeer"})
+	const [dishes , setDishes] = useState([])
 	const navigate = useNavigate()
+
+	useEffect(()=>{
+		axios.get("http://127.0.0.1:8018/api/v1/dishes/")
+		.then(function(response){
+			console.log(response.data.data)
+			setDishes(response.data.data)
+
+		})
+		.catch(function(error){
+			console.log(error)
+		})
+	},[])
 
 
 	let renderDishes=()=>{
 		return(
-		<ul>
-			<li>{dishes.name}</li>
-		</ul>
+			dishes.map((item)=>(
+				
+				<DishItem key = {item.id}  onClick={()=>navigate(`/dish/${item.id}`)}  >
+						<ImageContainer>
+							<DishImage src={item.featured_image} alt="food" />
+						</ImageContainer>
+						<FoodDetails>
+							<FoodNameContainer>
+								<FoodName>{item.dish_name}</FoodName>
+								<FoodLike>
+									<LikeImage src={require("../images/love.jpg")}  />
+									<LikeCount> 22 likes</LikeCount>
+								</FoodLike>
+							</FoodNameContainer>
+							<PostedBy>posted By : Nadeer</PostedBy>
+							<PostedDate>posted Date : sep 3, 2022</PostedDate>
+						</FoodDetails>
+					</DishItem>
+			
+				
+				
+			))
 
 		)
-
-
+		
 	}
+		
   return (
     <>
     	<Helmet>
@@ -34,7 +66,8 @@ export default function Dishes() {
 		</DisplaySection>
 			<SectionDishes>
 				<LeftSectionDishes>
-					<DishItem  onClick={()=>navigate("/dish")}  >
+					{renderDishes()}
+					{/* <DishItem  onClick={()=>navigate("/dish")}  >
 						<ImageContainer>
 							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
 						</ImageContainer>
@@ -253,7 +286,7 @@ export default function Dishes() {
 							<PostedBy>posted By : Nadeer</PostedBy>
 							<PostedDate>posted Date : sep 3, 2022</PostedDate>
 						</FoodDetails>
-					</DishItem>
+					</DishItem> */}
 
 				</LeftSectionDishes>
 				<RightSectionDishes>
@@ -299,7 +332,6 @@ background-repeat:no-repeat;
 background-size:contain;
 background-position:right 0 top 0;
 display: flex;
-flex-direction: column;
 background-color: #eef0f4;
 `
 const DisplayTitle = styled.h1`
@@ -333,9 +365,11 @@ cursor: pointer;
 `
 const ImageContainer = styled.div`
 width: 100%;
+height: 170px;
 `
 const DishImage = styled.img`
 width: 100%;
+height: 170px;
 display: inline-block;
 border-radius: 8px;
 `

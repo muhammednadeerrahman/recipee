@@ -1,20 +1,39 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Header from '../includes/Header'
+import axios from 'axios'
 
 export default function Dish() {
+	const [recipee,setRecipee] =useState([])
+	const {id} = useParams()
+
+
+	useEffect(()=>{
+		axios.get(`http://127.0.0.1:8018/api/v1/dishes/view/${id}/`)
+		.then(function(response){
+			console.log(response)
+			setRecipee(response.data.data)
+			console.log(recipee.name)
+
+
+		})
+		.catch(function(error){
+			console.log(error)
+		})
+	},[])
+
   return (
     <>
 		<Header/>
         <SinglePageSection>
         	<SinglePageTop>
-				<SinglePageTitle>Biriyani</SinglePageTitle>
-				<SinglePageCategory>Indian</SinglePageCategory>
+				<SinglePageTitle>{recipee.dish_name}</SinglePageTitle>
+				<SinglePageCategory>{recipee.category}</SinglePageCategory>
         	</SinglePageTop>
 			<SinglePagecontentSection>
 				<LeftContentSection>
-					<FoodImage src={require("../images/firedrice.jpg")} />
+					<FoodImage src={recipee.featured_image} alt="foodImage"/>
 					<SinglePageBottom>
 						<DetailSection>
 							<PostedBy>Nadeer</PostedBy>
