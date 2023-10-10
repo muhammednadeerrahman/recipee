@@ -5,11 +5,9 @@ from dishes.models import Dish
 
 class DishesSerializer (ModelSerializer):
 
-    category=SerializerMethodField()
+    category = serializers.StringRelatedField(many=True)
 
     class Meta : 
         model = Dish 
         fields = ("id","featured_image","date","dish_name","category")
 
-        def get_category(self, instance):
-            return instance.category.name
