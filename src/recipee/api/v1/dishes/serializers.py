@@ -11,3 +11,12 @@ class DishesSerializer (ModelSerializer):
         model = Dish 
         fields = ("id","featured_image","date","dish_name","category")
 
+
+
+class RecipeeSerializer (ModelSerializer):
+
+    category = serializers.StringRelatedField(many=True)
+
+    class Meta : 
+        model = Dish 
+        fields = ("id","featured_image","date","dish_name","category","ingredients","recipee")
