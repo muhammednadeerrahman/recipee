@@ -54,13 +54,13 @@ export default function Signup() {
             <LoginInfo>Create an account to acccess all the features</LoginInfo>
             <Form onSubmit={handleSubmit} > 
                 <InputContainer>
-                    <TextInput type="text" placeholder="Name" />
+                    <TextInput type="text" placeholder="Name" value={name} onChange={(e)=>setName(e.target.value)} />
                 </InputContainer>
                 <InputContainer>
-                    <TextInput type="email" placeholder="Email"  />
+                    <TextInput type="email" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
                 </InputContainer>
                 <InputContainer>
-                    <TextInput type="password" placeholder="Password"  />
+                    <TextInput type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} />
                 </InputContainer>
                 <LoginButton to="/login">Log in</LoginButton>
 

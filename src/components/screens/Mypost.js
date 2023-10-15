@@ -1,35 +1,44 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Header from '../includes/Header'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { userContext } from '../../App'
 
 export default function Mypost() {
 	const [myposts, setMyposts] = useState([])
+	const {userdata} = useContext(userContext)
 
 	useEffect(()=>{
-		axios.get("http://127.0.0.1:8018/api/v1/dishes/mypost/")
-		.then(function(response){
-			console.log(response.data)
-			setMyposts(response.data)
+		axios.get("http://127.0.0.1:8018/api/v1/dishes/mypost/",
+			{headers : {
+				Authorization : `Bearer ${userdata?.access}`,
+			},
 		})
-	})
+		.then(function(response){
+			console.log(response.data.data)
+			setMyposts(response.data.data)
+		})
+		.catch(function(error){
+			console.log(error)
+		})
+	},[])
 	let myPost = () =>{
 		return(
 			myposts.map((post)=>(
-				<DishItem   >
+				<DishItem  key = {post.id}   >
 					<ImageContainer>
-						<DishImage src={require("../images/firedrice.jpg")} alt="food" />
+						<DishImage src={post.featured_image} alt="food" />
 					</ImageContainer>
 					<FoodDetails>
 						<FoodNameContainer>
-							<FoodName>Biriyani</FoodName>
+							<FoodName>{post.dish_name}</FoodName>
 							<FoodLike>
-								<LikeImage src={require("../images/love.jpg")}  />
+								<LikeImage src={require("../images/likebutton.png")}  />
 								<LikeCount> 22 likes</LikeCount>
 							</FoodLike>
 						</FoodNameContainer>
-						<PostedDate>posted Date : sep 3, 2022</PostedDate>
+						<PostedDate>{post.date}</PostedDate>
 						<PostChange>
 							<EditPost>
 								<EditImageContanier>
@@ -49,7 +58,7 @@ export default function Mypost() {
 				))
 		)
 	}
-	
+
   return (
     <>
       	<Header/>
