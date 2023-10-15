@@ -49,16 +49,27 @@ def recipee(request, id):
         return Response (response_data)
     
 
+@api_view(["GET"])
+def get_categories(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+
 @api_view(["POST"])
-@permission_classes([AllowAny])
-def addRecipee(request):
+@permission_classes([IsAuthenticated])
+def create(request):
 
     dish_name = request.data["dish_name"]
     ingredients = request.data["ingredients"]
     recipee = request.data["recipee"]
-    user_name = request.user.username
+    user_name = request.user
     featured_image = request.data["featured_image"]
+    categories_ids = request.data.get("category")
 
+    selected_categories_ids = [int(id) for id in categories_ids.split(',')]
+    
+    print(selected_categories_ids)
 
     instance = Dish.objects.create(
         dish_name = dish_name,
@@ -68,7 +79,12 @@ def addRecipee(request):
         featured_image = featured_image
 
     )
-    instance.save(commit=False)
+        # Add selected categories to the Dish instance
+    selected_categories = Category.objects.filter(id__in=selected_categories_ids)
+    instance.category.add(*selected_categories)
+
+    # Save the Dish instance
+    instance.save()
 
     request_data = {
             "status_code" : 6000,
@@ -79,9 +95,28 @@ def addRecipee(request):
 
 
 @api_view(["GET"])
-def get_categories(request):
-    categories = Category.objects.all()
-    serializer = CategorySerializer(categories, many=True)
-    return Response(serializer.data)
+@permission_classes([AllowAny])
+def mypost(request, id):
+
+    if Dish.objects.filter(user_name = request.user).exists():
+        mypost = Dish.objects.filter(user_name = request.user, is_deleted = False)
+
+        context = {
+            "request" : request
+        }
+        serializer = RecipeeSerializer(mypost,context = context)
+        request_data = {
+            "status_code" : 6000,
+            "data" : serializer.data,
+            "message" : "sucecss"
+        }
+        return Response (request_data)
+    else:
+        response_data =  {
+            "status_code" : 6001,
+            "message" : "oops..! something error"
+        }
+        return Response (response_data)
+
 
     

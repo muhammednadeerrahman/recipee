@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from pathlib import Path
 
 
@@ -117,7 +119,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
- 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1), 
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
