@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 
 // import logo from './logo.svg';
 import {BrowserRouter as Router,Routes,Route} from "react-router-dom"
@@ -12,23 +12,55 @@ import Signup from "./components/screens/Signup";
 import Createpost from "./components/screens/Createpost";
 import Profile from "./components/screens/Profile";
 
+export const userContext = React.createContext()
+
+
 function App() {
-  return (
-    <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Dishes/>} />
-          <Route path="/dish/:id" element={<Dish/>} />
-          <Route path="/login" element={<Login/>} />
-          <Route path="/Signup" element={<Signup/>} />
-          <Route path="/mypost" element={<Mypost/>} />
-          <Route path="/createpost" element={<Createpost/>} />
-          <Route path="/profile" element={<Profile/>} />
 
-        </Routes>
-      </Router>
+	const [userdata, setUserdata] = useState({});
+	const [loading, setLoading] = useState(true);
 
-    </div>
+	const updateUserData = (action) =>{
+	  switch(action.type){
+		case "LOGOUT":
+		  setUserdata(null);
+		  localStorage.clear();
+		  break;
+		case "LOGIN" :
+		  setUserdata(action.payload);
+		  break;
+		default :
+		  break;
+  
+	  }
+  
+	};
+	useEffect(() =>{
+	  setUserdata(JSON.parse(localStorage.getItem("user_data")));
+	  setLoading(false);
+  
+	},[]);
+
+  return loading?(<h1>loading...</h1>) : (
+    <>
+      <userContext.Provider value={{userdata , updateUserData}}>
+        <Router>
+          
+            <Routes>
+              <Route path="/" element={<Dishes/>} />
+              <Route path="/dish/:id" element={<Dish/>} />
+              <Route path="/login" element={<Login/>} />
+              <Route path="/Signup" element={<Signup/>} />
+              <Route path="/mypost" element={<Mypost/>} />
+              <Route path="/createpost" element={<Createpost/>} />
+              <Route path="/profile" element={<Profile/>} />
+
+            </Routes>
+        </Router>
+      </userContext.Provider>
+
+
+    </>
   );
 }
 

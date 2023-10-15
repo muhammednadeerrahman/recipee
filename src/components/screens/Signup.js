@@ -1,9 +1,43 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React,{useState, useContext} from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 
 
 export default function Signup() {
+
+    const  [email, setEmail] = useState("")
+    const  [password, setPassword] = useState("")
+    const  [name, setName] = useState("")
+    const  [message, setMessage] = useState("")
+
+    const navigate = useNavigate()
+    let handleSubmit = (e) =>{
+        e.preventDefault()
+        axios.post(`http://127.0.0.1:8018/api/v1/auth/create/`,{name,password,email})
+        .then((response) =>{
+            let data = response.data.data
+            let statuscode = response.data.status_code
+            if (statuscode == 6000){
+                console.log(response.data.data)
+                localStorage.getItem("user_data", JSON.stringify(data))
+                navigate("/auth/login/")
+            }
+            else{
+                setMessage(response.data.message)
+            }
+            
+        })
+        .catch((error)=>{
+            console.log(error.message)
+            if (error.response.status == 401){
+                setMessage(error.response.data.detail)
+
+            }
+        })
+
+
+    }
   return (
 <Container>
     <LeftContainer>
@@ -18,7 +52,7 @@ export default function Signup() {
         <LoginContainer>
             <LoginHeading>Register into Account</LoginHeading>
             <LoginInfo>Create an account to acccess all the features</LoginInfo>
-            <Form > 
+            <Form onSubmit={handleSubmit} > 
                 <InputContainer>
                     <TextInput type="text" placeholder="Name" />
                 </InputContainer>

@@ -1,8 +1,58 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React,{useState,useEffect, useContext} from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import queryString from "query-string"
+import axios from 'axios';
+import { userContext } from '../../App';
+
 
 export default function () {
+
+
+
+    const [username,setUsername] = useState("")
+	const [password,setPassword] = useState("")
+	const [message,setMessage] = useState("")
+    const [nextpath, setNextpath] = useState("");
+
+    const navigate = useNavigate()
+    const {user_data,updateUserData} = useContext(userContext)
+    const location = useLocation();
+
+
+    useEffect(() => {
+     const search = location.search ;
+     const value = queryString.parse(search);
+     const {next} = value;
+     setNextpath(next);
+      
+   },[]);
+
+    let handleSubmit = (e)=>{
+        setMessage("")
+        e.preventDefault();
+
+        axios.post(`http://127.0.0.1:8018/api/v1/auth/token/`,{username,password})
+        .then((response)=>{
+            
+            console.log(response);
+           let  {data} = response;
+            localStorage.setItem("user_data",JSON.stringify(data));
+            updateUserData ({type : "LOGIN", payload : data});
+           if (nextpath ){navigate(nextpath)}else {navigate("/")}
+        })
+        .catch((error)=>{
+            console.log(error.message)
+            if (error.response.status == 401){
+                setMessage(error.response.data.detail)
+
+            }
+        })
+    }
+
+
+
+
   return (
     <Container>
     <LeftContainer>
@@ -17,15 +67,15 @@ export default function () {
         <LoginContainer>
             <LoginHeading>Login to your Account</LoginHeading>
             <LoginInfo>Enter email and password to login</LoginInfo>
-            <Form > 
+            <Form onSubmit={handleSubmit} > 
                 <InputContainer>
-                    <TextInput type="email" placeholder="Email" />
+                    <TextInput type="email"  placeholder="Email" value={username} onChange={(e)=>setUsername(e.target.value)} />
                 </InputContainer>
                 <InputContainer>
-                    <TextInput type="password" placeholder="Password"  />
+                    <TextInput type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}  />
                 </InputContainer>
                 <LoginButton to="/signup">Signup Now</LoginButton>
-
+                {message && <ErrorMessage>{message}</ErrorMessage>}
                 <ButtonContainer>
                     <SubmitButton>Login</SubmitButton>
                 </ButtonContainer>
@@ -129,8 +179,9 @@ display: flex;
 justify-content: center;
 `;
 const ErrorMessage = styled.p`
-font-size: 17px;
-color: red;
-margin-bottom: 25px;
-text-align: center;
+    font-size: 17px;
+    color: red;
+    margin-bottom: 25px;
+    text-align: center;
 `;
+

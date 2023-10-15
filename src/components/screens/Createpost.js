@@ -1,12 +1,24 @@
-import { useEffect, useState} from 'react'
+import { useEffect, useState,useContext} from 'react'
 import Header from '../includes/Header'
 import styled from 'styled-components'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { userContext } from '../../App'
 
 
 
 export default function Createpost() {
+    const [name, setName] = useState("")
+    const [recipee, setRecipee] = useState("")
+    const [image, setImage] = useState(null)
+    const [ingredients, setIngredients] = useState("")
     const [category, setCategory] = useState([])
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    
+
+    const {userdata} = useContext(userContext)
+    const navigate = useNavigate()
+
 
     useEffect(()=>{
         axios.get("http://127.0.0.1:8018/api/v1/dishes/create/get_categories/")
@@ -26,58 +38,113 @@ export default function Createpost() {
         return(
             category.map((categories)=>(
                 <>
-                    <CategoryLabel key={categories.id}>{categories.name}</CategoryLabel>
-                    <CategoryInput
-                        type="checkbox"
-                        id={categories.id}
-                        value={categories.id}
-                    />
+                <li key={categories.id}>
+                    <CategoryLabel >{categories.name}</CategoryLabel>
+                        <CategoryInput
+                            type="checkbox"
+                            id={categories.id}
+                            value={categories.id}
+                            checked={selectedCategories.includes(categories.id)}
+                            onChange={handleCheckboxChange}
+                        />
+
+                </li>
+                   
                 </>
-
-            
-    
-    
             ))
-
         )
-        
-
     }
     
-
     let formsubmit = (e)=>{
         e.preventDefault()
+
+        const formField = new FormData()
+
+        formField.append('dish_name',name)
+        formField.append('recipee',recipee)
+        formField.append('ingredients',ingredients)
+        formField.append('category',selectedCategories)
+        if(image !== null){
+            formField.append('featured_image',image)
+        }
+        
+        axios({
+            method : "post",
+            url : "http://127.0.0.1:8018/api/v1/dishes/create/",
+            data : formField,
+            headers: {
+                Authorization: `Bearer ${userdata?.access}`,
+              },
+        },)
+        // .post("http://127.0.0.1:8018/api/v1/dishes/create/", formData, {
+        //     headers: {
+        //       "Content-Type": "multipart/form-data",
+        //     },
+        //   })
+        .then(function(response){
+            console.log(response.data)
+            navigate("/")
+        })
+        .catch(function(error){
+            
+            console.log(error)
+        })
         
 
     }
+
+
+    const handleCheckboxChange = (event) => {
+        const categoryId = Number(event.target.value); 
+        const isChecked = event.target.checked; // Check if the checkbox is checked
+    
+        console.log(selectedCategories)
+        if (isChecked) {
+       
+          setSelectedCategories((prevSelectedCategories) => [
+            ...prevSelectedCategories,
+            categoryId,
+          ]);
+        } else {
+
+          setSelectedCategories((prevSelectedCategories) =>
+            prevSelectedCategories.filter((id) => id !== categoryId)
+          );
+        }
+      };
 
 
   return (
     <>
         <Header/>
         <CreatePage>
-            <CreatePostForm onSubmit={formsubmit} encType='multipart/form-data'>
+            <CreatePostForm onSubmit={formsubmit} >
                 <TitleContainer>
-                    <DishTitle>Title</DishTitle>
-                    <DishTitleInput/>
+                    <DishTitle>Recipee Title</DishTitle>
+                    <DishTitleInput name= "dish_name" value={name} onChange={(e)=>setName(e.target.value)} />
                 </TitleContainer>
                 <TitleContainer>
                     <CategoryTitle>Category</CategoryTitle>
-
+                    <ul>
                         {categoryList()}
+
+                    </ul>
 
                 </TitleContainer>
                 <TitleContainer>
                     <ImageTitle>Image</ImageTitle>
-                    <ImageInput type='file'/>
+                    <ImageInput 
+                        type='file' 
+                        name= "featured_image"
+                        onChange={(e)=>setImage(e.target.files[0])} />
                 </TitleContainer>
                 <TitleContainer>
                     <IngredientTitle>Ingredients</IngredientTitle>
-                    <IngredientInput/>
+                    <IngredientInput name= "ingredients"   value={ingredients} onChange={(e)=>setIngredients(e.target.value)} />
                 </TitleContainer>
                 <TitleContainer>
                     <PreparationTitle>Preparations</PreparationTitle>
-                    <PreparationInput/>
+                    <PreparationInput name= "recipee"  value={recipee} onChange={(e)=>setRecipee(e.target.value)} />
                 </TitleContainer>
                 <SubmitContainer>
                     <SubmitButton>Submit</SubmitButton>

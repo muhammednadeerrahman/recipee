@@ -1,9 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../includes/Header'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 export default function Mypost() {
+	const [myposts, setMyposts] = useState([])
+
+	useEffect(()=>{
+		axios.get("http://127.0.0.1:8018/api/v1/dishes/mypost/")
+		.then(function(response){
+			console.log(response.data)
+			setMyposts(response.data)
+		})
+	})
+	let myPost = () =>{
+		return(
+			myposts.map((post)=>(
+				<DishItem   >
+					<ImageContainer>
+						<DishImage src={require("../images/firedrice.jpg")} alt="food" />
+					</ImageContainer>
+					<FoodDetails>
+						<FoodNameContainer>
+							<FoodName>Biriyani</FoodName>
+							<FoodLike>
+								<LikeImage src={require("../images/love.jpg")}  />
+								<LikeCount> 22 likes</LikeCount>
+							</FoodLike>
+						</FoodNameContainer>
+						<PostedDate>posted Date : sep 3, 2022</PostedDate>
+						<PostChange>
+							<EditPost>
+								<EditImageContanier>
+									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
+								</EditImageContanier>
+								<EditTitle>edit</EditTitle>
+							</EditPost>
+							<DeletePost>
+								<DeleteImageContanier>
+									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
+								</DeleteImageContanier>
+								<DeleteTitle>delete</DeleteTitle>
+							</DeletePost>
+						</PostChange>
+					</FoodDetails>
+            	</DishItem>
+				))
+		)
+	}
+	
   return (
     <>
       	<Header/>
@@ -15,185 +61,8 @@ export default function Mypost() {
             	</PostNumber>
           	</SectionTop>
          	<SectionBottom>
-              	<DishItem   >
-					<ImageContainer>
-						<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-					</ImageContainer>
-					<FoodDetails>
-						<FoodNameContainer>
-							<FoodName>Biriyani</FoodName>
-							<FoodLike>
-								<LikeImage src={require("../images/love.jpg")}  />
-								<LikeCount> 22 likes</LikeCount>
-							</FoodLike>
-						</FoodNameContainer>
-						<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						<PostChange>
-							<EditPost>
-								<EditImageContanier>
-									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
-								</EditImageContanier>
-								<EditTitle>edit</EditTitle>
-							</EditPost>
-							<DeletePost>
-								<DeleteImageContanier>
-									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
-								</DeleteImageContanier>
-								<DeleteTitle>delete</DeleteTitle>
-							</DeletePost>
-						</PostChange>
-					</FoodDetails>
-            	</DishItem>
-
-				<DishItem   >
-					<ImageContainer>
-						<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-					</ImageContainer>
-					<FoodDetails>
-						<FoodNameContainer>
-							<FoodName>Biriyani</FoodName>
-							<FoodLike>
-								<LikeImage src={require("../images/love.jpg")}  />
-								<LikeCount> 22 likes</LikeCount>
-							</FoodLike>
-						</FoodNameContainer>
-						<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						<PostChange>
-							<EditPost>
-								<EditImageContanier>
-									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
-								</EditImageContanier>
-								<EditTitle>edit</EditTitle>
-							</EditPost>
-							<DeletePost>
-								<DeleteImageContanier>
-									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
-								</DeleteImageContanier>
-								<DeleteTitle>delete</DeleteTitle>
-							</DeletePost>
-						</PostChange>
-					</FoodDetails>
-            	</DishItem>
-
-				<DishItem   >
-					<ImageContainer>
-						<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-					</ImageContainer>
-					<FoodDetails>
-						<FoodNameContainer>
-							<FoodName>Biriyani</FoodName>
-							<FoodLike>
-								<LikeImage src={require("../images/love.jpg")}  />
-								<LikeCount> 22 likes</LikeCount>
-							</FoodLike>
-						</FoodNameContainer>
-						<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						<PostChange>
-							<EditPost>
-								<EditImageContanier>
-									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
-								</EditImageContanier>
-								<EditTitle>edit</EditTitle>
-							</EditPost>
-							<DeletePost>
-								<DeleteImageContanier>
-									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
-								</DeleteImageContanier>
-								<DeleteTitle>delete</DeleteTitle>
-							</DeletePost>
-						</PostChange>
-					</FoodDetails>
-            	</DishItem>
-				<DishItem   >
-					<ImageContainer>
-						<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-					</ImageContainer>
-					<FoodDetails>
-						<FoodNameContainer>
-							<FoodName>Biriyani</FoodName>
-							<FoodLike>
-								<LikeImage src={require("../images/love.jpg")}  />
-								<LikeCount> 22 likes</LikeCount>
-							</FoodLike>
-						</FoodNameContainer>
-						<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						<PostChange>
-							<EditPost>
-								<EditImageContanier>
-									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
-								</EditImageContanier>
-								<EditTitle>edit</EditTitle>
-							</EditPost>
-							<DeletePost>
-								<DeleteImageContanier>
-									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
-								</DeleteImageContanier>
-								<DeleteTitle>delete</DeleteTitle>
-							</DeletePost>
-						</PostChange>
-					</FoodDetails>
-            	</DishItem>
-
-				<DishItem   >
-					<ImageContainer>
-						<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-					</ImageContainer>
-					<FoodDetails>
-						<FoodNameContainer>
-							<FoodName>Biriyani</FoodName>
-							<FoodLike>
-								<LikeImage src={require("../images/love.jpg")}  />
-								<LikeCount> 22 likes</LikeCount>
-							</FoodLike>
-						</FoodNameContainer>
-						<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						<PostChange>
-							<EditPost>
-								<EditImageContanier>
-									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
-								</EditImageContanier>
-								<EditTitle>edit</EditTitle>
-							</EditPost>
-							<DeletePost>
-								<DeleteImageContanier>
-									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
-								</DeleteImageContanier>
-								<DeleteTitle>delete</DeleteTitle>
-							</DeletePost>
-						</PostChange>
-					</FoodDetails>
-            	</DishItem>
-
-				<DishItem   >
-					<ImageContainer>
-						<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-					</ImageContainer>
-					<FoodDetails>
-						<FoodNameContainer>
-							<FoodName>Biriyani</FoodName>
-							<FoodLike>
-								<LikeImage src={require("../images/love.jpg")}  />
-								<LikeCount> 22 likes</LikeCount>
-							</FoodLike>
-						</FoodNameContainer>
-						<PostedDate>posted Date : sep 3, 2022</PostedDate>
-					
-						<PostChange>
-							<EditPost>
-								<EditImageContanier>
-									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
-								</EditImageContanier>
-								<EditTitle>edit</EditTitle>
-							</EditPost>
-							<DeletePost>
-								<DeleteImageContanier>
-									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
-								</DeleteImageContanier>
-								<DeleteTitle>delete</DeleteTitle>
-							</DeletePost>
-						</PostChange>
-					</FoodDetails>
-            	</DishItem>
+				{myPost()}
+            
           	</SectionBottom>
       	</SectionMyPost>
     </>

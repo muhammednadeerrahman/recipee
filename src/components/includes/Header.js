@@ -1,13 +1,12 @@
-import React, { useEffect,useState } from 'react'
+import React, { useContext, useEffect,useState } from 'react'
 import styled from "styled-components"
 import {Link} from "react-router-dom"
+import { userContext } from '../../App'
 
 export default function Header() {
     const [isNav,setIsNav] = useState(false)
-    // useEffect(()=>{
-    //     setIsNav(false)
-    // },[])
 
+    const {userdata,updateUserData} = useContext(userContext)
 
 
   return (
@@ -39,10 +38,18 @@ export default function Header() {
                     </SectionContainer>
                 </SectionMiddle>
                 <SectionRight>
+                {userdata ? 
+                   ( <NavList>
+                        <LoginButton >Log out</LoginButton>
+                    </NavList>):
+                    (
                     <NavList>
                         <LoginButton to = "/login">Log in</LoginButton>
                         <SignupButton to = "/signup">Sign up</SignupButton>
                     </NavList>
+
+                )}
+                    
                 </SectionRight>
             </Main>
             <SectionMainNav className={isNav ? 'visible' :'hidden'}>
