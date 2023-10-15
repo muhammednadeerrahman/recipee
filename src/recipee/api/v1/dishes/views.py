@@ -95,28 +95,21 @@ def create(request):
 
 
 @api_view(["GET"])
-@permission_classes([AllowAny])
-def mypost(request, id):
+@permission_classes([IsAuthenticated])
+def mypost(request):
 
-    if Dish.objects.filter(user_name = request.user).exists():
-        mypost = Dish.objects.filter(user_name = request.user, is_deleted = False)
+    instance = Dish.objects.filter(user_name = request.user, is_deleted = False)
 
-        context = {
-            "request" : request
+    context = {
+        "request" : request
+    }
+    serializer = RecipeeSerializer(instance,many=True,context = context)
+    request_data = {
+        "status_code" : 6000,
+        "data" : serializer.data,
+        "message" : "sucecss"
         }
-        serializer = RecipeeSerializer(mypost,context = context)
-        request_data = {
-            "status_code" : 6000,
-            "data" : serializer.data,
-            "message" : "sucecss"
-        }
-        return Response (request_data)
-    else:
-        response_data =  {
-            "status_code" : 6001,
-            "message" : "oops..! something error"
-        }
-        return Response (response_data)
+    return Response (request_data)
 
 
     

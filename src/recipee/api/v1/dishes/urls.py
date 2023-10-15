@@ -8,7 +8,6 @@ urlpatterns = [
     path('view/<uuid:id>/', views.recipee),
     path('create/get_categories/', views.get_categories),
     path('create/', views.create),
+    path('mypost/', views.mypost),
     
-    
-
 ] 
