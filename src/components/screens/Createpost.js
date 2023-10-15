@@ -1,21 +1,71 @@
-import React from 'react'
+import { useEffect, useState} from 'react'
 import Header from '../includes/Header'
 import styled from 'styled-components'
+import axios from 'axios'
+
 
 
 export default function Createpost() {
+    const [category, setCategory] = useState([])
+
+    useEffect(()=>{
+        axios.get("http://127.0.0.1:8018/api/v1/dishes/create/get_categories/")
+        .then(function(response){
+            console.log(response.data)
+            setCategory(response.data)
+        
+        })
+        .catch(function(error){
+            console.log(error)
+        })
+
+
+    },[])
+
+    let  categoryList = ()=>{
+        return(
+            category.map((categories)=>(
+                <>
+                    <CategoryLabel key={categories.id}>{categories.name}</CategoryLabel>
+                    <CategoryInput
+                        type="checkbox"
+                        id={categories.id}
+                        value={categories.id}
+                    />
+                </>
+
+            
+    
+    
+            ))
+
+        )
+        
+
+    }
+    
+
+    let formsubmit = (e)=>{
+        e.preventDefault()
+        
+
+    }
+
+
   return (
     <>
         <Header/>
         <CreatePage>
-            <CreatePostForm>
+            <CreatePostForm onSubmit={formsubmit} encType='multipart/form-data'>
                 <TitleContainer>
                     <DishTitle>Title</DishTitle>
                     <DishTitleInput/>
                 </TitleContainer>
                 <TitleContainer>
                     <CategoryTitle>Category</CategoryTitle>
-                    <CategoryInput/>
+
+                        {categoryList()}
+
                 </TitleContainer>
                 <TitleContainer>
                     <ImageTitle>Image</ImageTitle>
@@ -72,7 +122,10 @@ outline: none;
 
 
 const CategoryTitle = styled(DishTitle)``
-const CategoryInput = styled(DishTitleInput)``
+const CategoryLabel = styled.label`
+color:black;
+`
+const CategoryInput = styled.input``
 
 const ImageTitle = styled(DishTitle)``
 const ImageInput = styled(DishTitleInput)``

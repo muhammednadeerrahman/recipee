@@ -9,12 +9,14 @@ export default function Dish() {
 	const {id} = useParams()
 
 
+
+
 	useEffect(()=>{
 		axios.get(`http://127.0.0.1:8018/api/v1/dishes/view/${id}/`)
 		.then(function(response){
 			console.log(response)
 			setRecipee(response.data.data)
-			console.log(recipee.name)
+	
 
 
 		})
@@ -23,39 +25,39 @@ export default function Dish() {
 		})
 	},[])
 
+	
+
   return (
     <>
 		<Header/>
         <SinglePageSection>
         	<SinglePageTop>
 				<SinglePageTitle>{recipee.dish_name}</SinglePageTitle>
-				<SinglePageCategory>{recipee.category}</SinglePageCategory>
+				<SinglePageCategory>{recipee.category ? recipee.category.join(', ') : ""}</SinglePageCategory>
         	</SinglePageTop>
 			<SinglePagecontentSection>
 				<LeftContentSection>
 					<FoodImage src={recipee.featured_image} alt="foodImage"/>
 					<SinglePageBottom>
 						<DetailSection>
-							<PostedBy>Nadeer</PostedBy>
+							<PostedBy>{recipee.user_name}</PostedBy>
 							<PostLike>
 								<LikeImage src={require("../images/love.jpg")} />
 								<LikeCount>22 Likes</LikeCount>
 							</PostLike>
 						</DetailSection>
 						<DateSection>
-							<Date>oct 22, 2022</Date>
+							<Date>{recipee.date}</Date>
 						</DateSection>
 					</SinglePageBottom>
 				</LeftContentSection>
 				<RightContentSection>
 					<FoodRecipeeTitle>Ingredients</FoodRecipeeTitle>
-					<FoodRecipee>
-						helo jersag wanresognaei weasogie rgnaesoio roieajsgojwei iaorsgokg iornsdfga eiorsfdioj iragesoizg oksjde isejrdjgoj kodfengskogkoedsnfrgk oknesdokfio
-					</FoodRecipee>
+					<FoodRecipee>{recipee.ingredients}</FoodRecipee>
 
 					<FoodRecipeeTitle>Preparation</FoodRecipeeTitle>
 					<FoodRecipee>
-						helo jersag wanresognaei weasogie rgnaesoio roieajsgojwei iaorsgokg iornsdfga eiorsfdioj iragesoizg oksjde isejrdjgoj kodfengskogkoedsnfrgk oknesdokfio
+						{recipee.recipee}
 					</FoodRecipee>
 					
 				</RightContentSection>
