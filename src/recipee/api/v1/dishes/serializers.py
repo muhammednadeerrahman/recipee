@@ -24,19 +24,28 @@ class RecipeeSerializer (ModelSerializer):
     category = serializers.StringRelatedField(many=True)
     user_name = SerializerMethodField()
 
-
     class Meta : 
         model = Dish 
         fields = ("id","featured_image","date","dish_name","category","ingredients","recipee","user_name")
 
         
     def get_user_name(self, instance):
+        return instance.user_name.username 
+
+
+class EditSerializer (ModelSerializer):
+
+    user_name = SerializerMethodField()
+
+    class Meta : 
+        model = Dish 
+        fields = ("id","featured_image","date","dish_name","category", "ingredients","recipee","user_name")
+    
+    def get_user_name(self, instance):
         return instance.user_name.username
     
 
-    
 class CategorySerializer (ModelSerializer):
-
 
     class Meta : 
         model = Category 

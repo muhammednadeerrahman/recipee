@@ -30,4 +30,8 @@ class Category (models.Model):
     def __str__(self):
         return self.name
     
+
+class Likes (models.Model):
+    username = models.ma("auth.User")
+    dish = models.ForeignKey("dishes.Dish")
     

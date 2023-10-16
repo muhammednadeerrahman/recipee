@@ -2,9 +2,11 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.generics import UpdateAPIView
 
 from dishes.models import Dish, Category
-from api.v1.dishes.serializers import DishesSerializer,RecipeeSerializer, CategorySerializer, DeleteSerializer
+from api.v1.dishes.serializers import DishesSerializer,RecipeeSerializer, CategorySerializer,\
+DeleteSerializer,EditSerializer
 
 
 @api_view(["GET"])
@@ -118,6 +120,7 @@ def delete(request, id):
     if Dish.objects.filter(id=id).exists():
         instance = Dish.objects.get(id=id)
         serializer  = DeleteSerializer(instance,data=request.data,partial = True)
+        print(instance)
         if serializer.is_valid():
             serializer.save()
 
@@ -134,26 +137,63 @@ def delete(request, id):
         return Response(response_data)
 
 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def EditRecipee(request, id):
+    if Dish.objects.filter(pk=id).exists():    
+        instance = Dish.objects.get(pk=id)
+        context = {
+        "request" : request
+        }
+        serializer = EditSerializer(instance,context = context)
+        response_data = {
+            "status_code" : 6000,
+            "data" : serializer.data,
+            "message" : "sucecss"
+        }
+        return Response (response_data)
+    else:
+        response_data =  {
+            "status_code" : 6001,
+            "message" : "oops..! recipee not found"
+        }
+        return Response (response_data)
+
+
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def edit(request, id):
-    if Dish.objects.filter(id = id).exists():
-        instance = Dish.objects.get(id = id)
-        serializer = RecipeeSerializer(instance, data=request.data,partial = True)
-        if serializer.is_valid():
-            serializer.save()
+    if Dish.objects.filter(pk=id).exists():
+        instance = Dish.objects.get(pk=id)
+
+        dish_name = request.data.get("dish_name", instance.dish_name)
+        ingredients = request.data.get("ingredients", instance.ingredients)
+        recipee = request.data.get("recipee", instance.recipee)
+        featured_image = request.data.get("featured_image", instance.featured_image)
+
+        categories_ids = request.data.get("category")
+        selected_categories_ids = [int(id) for id in categories_ids.split(',')]
+
+        instance.dish_name = dish_name
+        instance.ingredients = ingredients
+        instance.recipee = recipee
+        instance.featured_image = featured_image
+
+        instance.category.clear()
+        selected_categories = Category.objects.filter(id__in=selected_categories_ids)
+        instance.category.add(*selected_categories)
+
+        instance.save()
 
         response_data = {
-        "status_code" : 6000,
-        "message" : "sucecssfully updated"
+            "status_code": 6000,
+            "message": "Successfully updated"
         }
         return Response(response_data)
     else:
         response_data = {
-        "status_code" : 6001,
-        "message" : "post not found"
+            "status_code": 6001,
+            "message": "Post not found"
         }
         return Response(response_data)
-
-
-    
