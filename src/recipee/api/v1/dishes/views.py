@@ -134,5 +134,26 @@ def delete(request, id):
         return Response(response_data)
 
 
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def edit(request, id):
+    if Dish.objects.filter(id = id).exists():
+        instance = Dish.objects.get(id = id)
+        serializer = RecipeeSerializer(instance, data=request.data,partial = True)
+        if serializer.is_valid():
+            serializer.save()
+
+        response_data = {
+        "status_code" : 6000,
+        "message" : "sucecssfully updated"
+        }
+        return Response(response_data)
+    else:
+        response_data = {
+        "status_code" : 6001,
+        "message" : "post not found"
+        }
+        return Response(response_data)
+
 
     

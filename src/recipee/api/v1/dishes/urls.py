@@ -10,5 +10,6 @@ urlpatterns = [
     path('create/', views.create),
     path('mypost/', views.mypost),
     path('mypost/delete/<uuid:id>/', views.delete),
+    path('mypost/edit/<uuid:id>/', views.edit),
     
 ] 
