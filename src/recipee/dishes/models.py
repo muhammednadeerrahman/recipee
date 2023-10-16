@@ -9,11 +9,12 @@ class Dish (models.Model):
     category = models.ManyToManyField("dishes.Category")
     ingredients = models.TextField()
     recipee = models.TextField()
-    user_name = models.ForeignKey("auth.User",on_delete=models.CASCADE)
+    user_name = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
     featured_image = models.FileField(upload_to="media/Dish_image",null=True,blank=True)
     
+    like = models.ManyToManyField("auth.User")
     class Meta: 
         verbose_name_plural = "Dishes"
 
@@ -30,8 +31,11 @@ class Category (models.Model):
     def __str__(self):
         return self.name
     
+# class Profile (models.Model):
+#     name = models.OneToOneField("auth.User",on_delete=models.CASCADE)
+#     phone = models.CharField(max_length=12,blank=True,null=True)
+#     profile_image = models.FileField(upload_to="profile/",blank=True,null=True)
+# class Likes (models.Model):
+#     username = models.ManyToManyField("auth.User")
+#     dish = models.ForeignKey("dishes.Dish",on_delete=models.CASCADE)
 
-class Likes (models.Model):
-    username = models.ma("auth.User")
-    dish = models.ForeignKey("dishes.Dish")
-    

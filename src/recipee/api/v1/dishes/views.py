@@ -197,3 +197,35 @@ def edit(request, id):
             "message": "Post not found"
         }
         return Response(response_data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def postLikes(request, id):
+    if Dish.objects.filter(id=id).exists():
+        instance = Dish.objects.get(id=id)
+
+        if instance.like.filter(username = request.user.username).exists():
+            instance.like.remove(request.user)
+            message  = "like removed"
+
+        else:
+            instance.like.add(request.user)
+            message  = "liked"
+
+        response_data =  {
+                "status_code" : 6000,
+                "message" : message                                                                                     
+            }
+        return Response(response_data)
+    else:
+        response_data =  {
+            "status_code" : 6001,
+            "message" : "oops..! place not found"
+        }
+        return Response (response_data)
+
+
+
+
+
