@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Header from '../includes/Header'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { userContext } from '../../App'
 
 export default function Mypost() {
 	const [myposts, setMyposts] = useState([])
 	const {userdata} = useContext(userContext)
+	const navigate = useNavigate()
 
 	useEffect(()=>{
 		axios.get("http://127.0.0.1:8018/api/v1/dishes/mypost/",
@@ -46,11 +47,11 @@ export default function Mypost() {
 								</EditImageContanier>
 								<EditTitle>edit</EditTitle>
 							</EditPost>
-							<DeletePost>
+							<DeletePost onClick = {()=>deletePost(post.id)}>
 								<DeleteImageContanier>
 									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
 								</DeleteImageContanier>
-								<DeleteTitle>delete</DeleteTitle>
+								<DeleteTitle >delete</DeleteTitle>
 							</DeletePost>
 						</PostChange>
 					</FoodDetails>
@@ -58,6 +59,30 @@ export default function Mypost() {
 				))
 		)
 	}
+
+	let deletePost = (id) => {
+		const formField = new FormData();
+		formField.append("is_deleted", true);
+	
+		axios({
+			method: "post",
+			url: `http://127.0.0.1:8018/api/v1/dishes/mypost/delete/${id}/`,
+			data: formField,
+			headers: {
+				Authorization: `Bearer ${userdata?.access}`,
+			},
+		})
+		.then(function(response){
+			console.log(response.data);
+			navigate("/")
+			// Handle success, such as removing the post from your state
+		})
+		.catch(function(error){
+			console.log(error);
+			// Handle errors
+		});
+	}
+		
 
   return (
     <>
