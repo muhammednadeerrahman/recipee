@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from dishes.models import Dish, Category
-from api.v1.dishes.serializers import DishesSerializer,RecipeeSerializer, CategorySerializer
+from api.v1.dishes.serializers import DishesSerializer,RecipeeSerializer, CategorySerializer, DeleteSerializer
 
 
 @api_view(["GET"])
@@ -17,12 +17,12 @@ def dishes(request):
         "request" : request
     }
     serializer = DishesSerializer(instance, many= True,context = context)
-    request_data = {
+    response_data = {
         "status_code" : 6000,
         "data" : serializer.data,
         "message" : "sucecss"
     }
-    return Response (request_data)
+    return Response (response_data)
 
 
 
@@ -35,12 +35,12 @@ def recipee(request, id):
         "request" : request
         }
         serializer = RecipeeSerializer(instance,context = context)
-        request_data = {
+        response_data = {
             "status_code" : 6000,
             "data" : serializer.data,
             "message" : "sucecss"
         }
-        return Response (request_data)
+        return Response (response_data)
     else:
         response_data =  {
             "status_code" : 6001,
@@ -86,11 +86,11 @@ def create(request):
     # Save the Dish instance
     instance.save()
 
-    request_data = {
+    response_data = {
             "status_code" : 6000,
             "message" : "sucecss"
         }
-    return Response (request_data)
+    return Response (response_data)
 
 
 
@@ -104,12 +104,35 @@ def mypost(request):
         "request" : request
     }
     serializer = RecipeeSerializer(instance,many=True,context = context)
-    request_data = {
+    response_data = {
         "status_code" : 6000,
         "data" : serializer.data,
         "message" : "sucecss"
         }
-    return Response (request_data)
+    return Response (response_data)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def delete(request, id):
+    if Dish.objects.filter(id=id).exists():
+        instance = Dish.objects.get(id=id)
+        serializer  = DeleteSerializer(instance,data=request.data,partial = True)
+        if serializer.is_valid():
+            serializer.save()
+
+        response_data = {
+        "status_code" : 6000,
+        "message" : "sucecssfully deleted"
+        }
+        return Response(response_data)
+    else:
+        response_data = {
+        "status_code" : 6001,
+        "message" : "post not found"
+        }
+        return Response(response_data)
+
 
 
     

@@ -3,6 +3,8 @@ from rest_framework.serializers import SerializerMethodField
 from rest_framework import serializers
 from dishes.models import Dish , Category
 
+
+
 class DishesSerializer (ModelSerializer):
 
     category = serializers.StringRelatedField(many=True)
@@ -39,3 +41,9 @@ class CategorySerializer (ModelSerializer):
     class Meta : 
         model = Category 
         fields = ("id","name")
+
+
+class DeleteSerializer(ModelSerializer):
+    class Meta : 
+        model = Dish
+        fields = ("id","is_deleted")
