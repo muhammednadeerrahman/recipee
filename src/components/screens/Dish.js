@@ -1,22 +1,35 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import styled from 'styled-components'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Header from '../includes/Header'
 import axios from 'axios'
+import { userContext } from '../../App'
 
 export default function Dish() {
 	const [recipee,setRecipee] =useState([])
+	const [likes , setLikes] = useState(0)
+	const [isLiked , setIsLiked] = useState(false)
+
 	const {id} = useParams()
+	const {userdata} = useContext(userContext)
+	const navigate = useNavigate()
 
 
 
 
 	useEffect(()=>{
-		axios.get(`http://127.0.0.1:8018/api/v1/dishes/view/${id}/`)
+		axios.get(`http://127.0.0.1:8018/api/v1/dishes/view/${id}/`,
+		{headers : {
+			Authorization : `Bearer ${userdata?.access}`,
+		},
+	})
 		.then(function(response){
 			console.log(response)
 			setRecipee(response.data.data)
-	
+			setLikes(response.data.data.like);
+			setIsLiked(response.data.data.is_liked);
+
+			
 
 
 		})
@@ -24,6 +37,39 @@ export default function Dish() {
 			console.log(error)
 		})
 	},[])
+
+	let handleLike = (e) => {
+		e.preventDefault()
+
+		axios.post(`http://127.0.0.1:8018/api/v1/dishes/likes/${id}/`,{},
+		{headers : {
+			Authorization : `Bearer ${userdata?.access}`,
+		},
+	})
+		.then(function(response){
+			console.log(response.data)
+			axios
+			.get(`http://127.0.0.1:8018/api/v1/dishes/view/${id}/`, {
+			   headers: {
+					Authorization: `Bearer ${userdata?.access}`,
+			   },
+			})
+			.then(function (response) {
+				setLikes(response.data.data.like);
+			  	setIsLiked(response.data.data.is_liked);
+
+			})
+			.catch(function (error) {
+			   	console.log(error);
+			});
+		})
+		.catch(function(error) {
+			console.log(error)
+		  });
+	}
+	
+
+
 
 	
 
@@ -42,8 +88,14 @@ export default function Dish() {
 						<DetailSection>
 							<PostedBy>{recipee.user_name}</PostedBy>
 							<PostLike>
-								<LikeImage src={require("../images/love.jpg")} />
-								<LikeCount>22 Likes</LikeCount>
+								{ (isLiked == false) ?
+								 (
+									<LikeLink onClick={handleLike} ><LikeImage src={require("../images/heart1.png")} /></LikeLink>
+								 ):
+								 (
+									<LikeLink onClick={handleLike} ><LikeImage src={require("../images/heart2.png")} /></LikeLink>
+								 )}
+								<LikeCount >{likes} Likes</LikeCount>
 							</PostLike>
 						</DetailSection>
 						<DateSection>
@@ -174,9 +226,16 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 `
+const LikeLink = styled(Link)`
+display: flex;
+justify-content: center;
+align-items: center;
+width: 25px;
+margin-right: 20px;
+`
 const LikeImage = styled.img`
 display: block;
-width: 25px;
+width: 100%;
 `
 const LikeCount = styled.h5`
 font-size: 16px;

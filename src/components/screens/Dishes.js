@@ -1,26 +1,49 @@
-import React,{useEffect, useState} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import Helmet from "react-helmet"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Header from '../includes/Header'
 import axios from "axios"
+import { userContext } from '../../App'
 
 export default function Dishes() {
 	const [dishes , setDishes] = useState([])
+	const [loading, setLoading] = useState(true);
+
+	const {userdata} = useContext(userContext)
 	const navigate = useNavigate()
 
 	useEffect(()=>{
-		axios.get("http://127.0.0.1:8018/api/v1/dishes/")
+		axios.get("http://127.0.0.1:8018/api/v1/dishes/",
+		{headers : {
+			Authorization : `Bearer ${userdata?.access}`,
+		},
+	})
 		.then(function(response){
 			console.log(response.data.data)
 			setDishes(response.data.data)
+
 
 		})
 		.catch(function(error){
 			console.log(error)
 		})
+		setLoading(false);
+
 	},[])
 
+	
+	const HeartIcon = ({ isLiked }) => {
+		return (
+		  <div>
+			{isLiked ? (
+			  <img src={require("../images/heart2.png")} alt="Liked" />
+			) : (
+			  <img src={require("../images/heart1.png")} alt="Not Liked" />
+			)}
+		  </div>
+		);
+	  };
 
 	let renderDishes=()=>{
 		return(
@@ -34,8 +57,15 @@ export default function Dishes() {
 							<FoodNameContainer>
 								<FoodName>{item.dish_name}</FoodName>
 								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
+									{(item.is_liked == true )?
+									(
+										<LikeLink><LikeImage src={require("../images/heart2.png")} /></LikeLink>
+									):
+									(
+										<LikeLink><LikeImage src={require("../images/heart1.png")} /></LikeLink>
+
+									)}
+									<LikeCount>{item.like} likes</LikeCount>
 								</FoodLike>
 							</FoodNameContainer>
 							<PostedBy>posted By : Nadeer</PostedBy>
@@ -51,7 +81,7 @@ export default function Dishes() {
 		
 	}
 		
-  return (
+  return loading?(<h1>loading...</h1>) : (
     <>
     	<Helmet>
         	<title>Recipee</title>
@@ -67,226 +97,7 @@ export default function Dishes() {
 			<SectionDishes>
 				<LeftSectionDishes>
 					{renderDishes()}
-					{/* <DishItem  onClick={()=>navigate("/dish")}  >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")} alt="likebutton" />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem>
-
-					<DishItem onClick={()=>navigate("/dish")} >
-						<ImageContainer>
-							<DishImage src={require("../images/firedrice.jpg")} alt="food" />
-						</ImageContainer>
-						<FoodDetails>
-							<FoodNameContainer>
-								<FoodName>Biriyani</FoodName>
-								<FoodLike>
-									<LikeImage src={require("../images/love.jpg")}  />
-									<LikeCount> 22 likes</LikeCount>
-								</FoodLike>
-							</FoodNameContainer>
-							<PostedBy>posted By : Nadeer</PostedBy>
-							<PostedDate>posted Date : sep 3, 2022</PostedDate>
-						</FoodDetails>
-					</DishItem> */}
+					
 
 				</LeftSectionDishes>
 				<RightSectionDishes>
@@ -386,10 +197,16 @@ const FoodLike = styled.div`
 display: flex;
 margin: 25px 0 ;
 `
-const LikeImage = styled.img`
+const LikeLink = styled(Link)`
+display: flex;
+justify-content: center;
+align-items: center;
 width: 20px;
-display: block;
 margin-right: 10px;
+`
+const LikeImage = styled.img`
+display: block;
+width: 100%;
 `
 const LikeCount = styled.div`
 font-size: 12px;

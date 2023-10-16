@@ -1,26 +1,39 @@
-import { useEffect, useState,useContext} from 'react'
-import Header from '../includes/Header'
-import styled from 'styled-components'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import React,{useState, useEffect, useContext} from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { userContext } from '../../App'
+import styled from 'styled-components'
+import Header from '../includes/Header'
 
-
-
-export default function Createpost() {
-    const [name, setName] = useState("")
+export default function Edit() {
     const [recipee, setRecipee] = useState("")
     const [image, setImage] = useState(null)
     const [ingredients, setIngredients] = useState("")
     const [category, setCategory] = useState([])
     const [selectedCategories, setSelectedCategories] = useState([]);
-    
+    const [data, setData]= useState([])
+    const [name, setName] = useState("")
 
+
+    
     const {userdata} = useContext(userContext)
     const navigate = useNavigate()
 
-
+    const {id} = useParams()
     useEffect(()=>{
+        axios.get(`http://127.0.0.1:8018/api/v1/dishes/editRecipee/${id}/`)
+        .then(function(response){
+            console.log(response.data.data)
+            setData(response.data.data)
+            setName(response.data.data.dish_name)
+            setIngredients(response.data.data.ingredients)
+            setRecipee(response.data.data.recipee)
+            setImage(response.data.data.featured_image)
+            setSelectedCategories(response.data.data.category.map((cat) => cat))
+            
+        })
+
+
         axios.get("http://127.0.0.1:8018/api/v1/dishes/create/get_categories/")
         .then(function(response){
             console.log(response.data)
@@ -47,58 +60,16 @@ export default function Createpost() {
                             checked={selectedCategories.includes(categories.id)}
                             onChange={handleCheckboxChange}
                         />
-
                 </li>
-                   
                 </>
             ))
         )
-    }
-    
-    let formsubmit = (e)=>{
-        e.preventDefault()
-
-        const formField = new FormData()
-
-        formField.append('dish_name',name)
-        formField.append('recipee',recipee)
-        formField.append('ingredients',ingredients)
-        formField.append('category',selectedCategories)
-        if(image !== null){
-            formField.append('featured_image',image)
-        }
-        
-        axios({
-            method : "post",
-            url : "http://127.0.0.1:8018/api/v1/dishes/create/",
-            data : formField,
-            headers: {
-                Authorization: `Bearer ${userdata?.access}`,
-              },
-        },)
-        // .post("http://127.0.0.1:8018/api/v1/dishes/create/", formData, {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //     },
-        //   })
-        .then(function(response){
-            console.log(response.data)
-            navigate("/")
-        })
-        .catch(function(error){
-            
-            console.log(error)
-        })
-        
-
     }
 
 
     const handleCheckboxChange = (event) => {
         const categoryId = Number(event.target.value); 
-        const isChecked = event.target.checked; // Check if the checkbox is checked
-
-
+        const isChecked = event.target.checked;
     
         console.log(selectedCategories)
         if (isChecked) {
@@ -115,12 +86,47 @@ export default function Createpost() {
         }
       };
 
+    let  handleSubmit = (e)=>{
+        e.preventDefault()
+
+        const formField = new FormData()
+
+        formField.append('dish_name',name)
+        formField.append('recipee',recipee)
+        formField.append('ingredients',ingredients)
+        formField.append('category',selectedCategories)
+        // formField.append('category',selectedCategories.map((item) => item))
+        if(image == null){
+            formField.append('featured_image',image)
+        }
+
+
+
+
+        axios({
+            method : "post",
+            url : `http://127.0.0.1:8018/api/v1/dishes/mypost/edit/${id}/`,
+            data : formField,
+            headers: {
+                Authorization: `Bearer ${userdata?.access}`,
+              },
+        },)
+        .then(function(response){
+            console.log(response.data)
+            navigate("/mypost")
+    
+        })
+        .catch(function(error){
+            console.log(error)
+        })
+      }
 
   return (
+
     <>
-        <Header/>
+          <Header/>
         <CreatePage>
-            <CreatePostForm onSubmit={formsubmit} >
+            <CreatePostForm onSubmit={handleSubmit} >
                 <TitleContainer>
                     <DishTitle>Recipee Title</DishTitle>
                     <DishTitleInput name= "dish_name" value={name} onChange={(e)=>setName(e.target.value)} />
@@ -135,6 +141,7 @@ export default function Createpost() {
                 </TitleContainer>
                 <TitleContainer>
                     <ImageTitle>Image</ImageTitle>
+                    <img src={data.featured_image} />
                     <ImageInput 
                         type='file' 
                         name= "featured_image"
@@ -153,10 +160,11 @@ export default function Createpost() {
                 </SubmitContainer>
 
             </CreatePostForm>
-        </CreatePage>
+        </CreatePage>   
     </>
   )
 }
+
 
 const CreatePage = styled.div`
 padding: 130px 100px;
@@ -221,4 +229,3 @@ font-size: 20px;
 font-weight: 600;
 border: none;
 `
-

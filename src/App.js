@@ -12,6 +12,7 @@ import Signup from "./components/screens/Signup";
 import Createpost from "./components/screens/Createpost";
 import Profile from "./components/screens/Profile";
 import Delete from "./components/screens/Delete";
+import Edit from "./components/screens/Edit";
 
 export const userContext = React.createContext()
 
@@ -49,12 +50,13 @@ function App() {
           
             <Routes>
               <Route path="/" element={<Dishes/>} />
-              <Route path="/dish/:id" element={<Dish/>} />
+              <Route path="/dish/:id/" element={<Dish/>} />
               <Route path="/login" element={<Login/>} />
               <Route path="/Signup" element={<Signup/>} />
               <Route path="/mypost" element={<Mypost/>} />
               <Route path="/createpost" element={<Createpost/>} />
               <Route path="/profile" element={<Profile/>} />
+              <Route path="/edit/:id/" element={<Edit/>} />
               <Route path="/delete/:id/"  element={<Delete/>} />
 
             </Routes>

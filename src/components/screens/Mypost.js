@@ -41,7 +41,7 @@ export default function Mypost() {
 						</FoodNameContainer>
 						<PostedDate>{post.date}</PostedDate>
 						<PostChange>
-							<EditPost>
+							<EditPost to = {`/edit/${post.id}/`} >
 								<EditImageContanier>
 									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
 								</EditImageContanier>

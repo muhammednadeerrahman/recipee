@@ -4,9 +4,16 @@ import {Link} from "react-router-dom"
 import { userContext } from '../../App'
 
 export default function Header() {
+    const [username, setUsername] = useState("")
     const [isNav,setIsNav] = useState(false)
-
     const {userdata,updateUserData} = useContext(userContext)
+
+    useEffect(()=>{
+
+            
+        
+
+    },[])
 
 
   return (
@@ -62,7 +69,7 @@ export default function Header() {
                             <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
                         </ProfileImageContainer>
                         <ProfileDetails>
-                            <ProfileName>Nadeer</ProfileName>
+                            <ProfileName>{username}</ProfileName>
                             <ProfileEmail>modnadeerrahman@gmail.com</ProfileEmail>
                             <SectionProfile>
                                 <ProfileLink to ="/profile">view profile</ProfileLink>
