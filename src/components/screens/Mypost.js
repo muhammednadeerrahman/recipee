@@ -36,7 +36,7 @@ export default function Mypost() {
 							<FoodName>{post.dish_name}</FoodName>
 							<FoodLike>
 								<LikeImage src={require("../images/likebutton.png")}  />
-								<LikeCount> 22 likes</LikeCount>
+								<LikeCount> {post.like} likes</LikeCount>
 							</FoodLike>
 						</FoodNameContainer>
 						<PostedDate>{post.date}</PostedDate>

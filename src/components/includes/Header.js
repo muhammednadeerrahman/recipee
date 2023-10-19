@@ -19,7 +19,7 @@ export default function Header() {
 
 	let handleKeyPress = (e)=>{
 		if (e.key == 'Enter'){
-			navigate(`/search/${search}/`)
+			navigate(`/${search}/`)
 		}
 	}
     

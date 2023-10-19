@@ -83,7 +83,9 @@ export default function Dish() {
         	</SinglePageTop>
 			<SinglePagecontentSection>
 				<LeftContentSection>
-					<FoodImage src={recipee.featured_image} alt="foodImage"/>
+					<LeftImageContainer>
+						<FoodImage src={recipee.featured_image} alt="foodImage"/>
+					</LeftImageContainer>
 					<SinglePageBottom>
 						<DetailSection>
 							<PostedBy>{recipee.user_name}</PostedBy>
@@ -177,16 +179,25 @@ display: flex;
 
 `
 const LeftContentSection = styled.div`
-width: 50%;
+width: 60%;
 display: flex;
 justify-content: center;
 align-items: center;
 flex-direction: column;
 padding: 0 20px;
 `
+const LeftImageContainer = styled.div`
+width: 100%;
+height: 500px;
+
+`
+
+
+
 const FoodImage = styled.img`
 width: 100%;
 display: block;
+height: 100%;
 `
 const RightContentSection = styled.div`
 width: 50%;

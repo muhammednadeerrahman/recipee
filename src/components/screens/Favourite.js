@@ -25,26 +25,61 @@ export default function Favourite() {
 			console.log(error)
 		})
 	},[])
+
+
 	let myPost = () =>{
 		return(
 			mylikes.map((post)=>(
-				<DishItem  key = {post.id} onClick={()=> navigate(`/dish/${post.id}`) }  >
+				<DishItem  key = {post.id}   >
 					<ImageContainer>
-						<DishImage src={post.featured_image} alt="food" />
+						<DishImage onClick={()=> navigate(`/dish/${post.id}`) } src={post.featured_image} alt="food" />
 					</ImageContainer>
 					<FoodDetails>
 						<FoodNameContainer>
 							<FoodName>{post.dish_name}</FoodName>
 							<FoodLike>
-								<LikeImage src={require("../images/likebutton.png")}  />
-								<LikeCount> {post.like} likes</LikeCount>
+							{ (post.is_liked == false) ?
+								 (
+									<LikeLink onClick={()=>handleLike(post.id)} ><LikeImage src={require("../images/heart1.png")} /></LikeLink>
+								 ):
+								 (
+									<LikeLink onClick={()=>handleLike(post.id)} ><LikeImage src={require("../images/heart2.png")} /></LikeLink>
+								 )}
+								<LikeCount >{post.like} Likes</LikeCount>
 							</FoodLike>
 						</FoodNameContainer>
+                        <PostedBy>posted By : {post.user_name}</PostedBy>
 						<PostedDate>{post.date}</PostedDate>
 					</FoodDetails>
             	</DishItem>
 				))
 		)
+	}
+
+    let handleLike = (id) => {
+
+		console.log(id)
+		axios.post(`http://127.0.0.1:8018/api/v1/dishes/likes/${id}/`,{},
+		{headers : {
+			Authorization : `Bearer ${userdata?.access}`,
+		},
+	})
+		.then(function(response){
+			console.log(response.data)
+			axios.get("http://127.0.0.1:8018/api/v1/dishes/",
+			{headers : {
+				Authorization : `Bearer ${userdata?.access}`,
+			},
+		})
+			.then(function(response){
+				console.log(response.data.data)
+                const likedPost= response.data.data.filter((post)=> post.is_liked == true)
+                setMylikes(likedPost)
+			})
+		})
+		.catch(function(error) {
+			console.log(error)
+		  });
 	}
 
   return (
@@ -85,7 +120,6 @@ const DishItem = styled.div`
 width: 30%;
 margin: 30px 30px 0 0;
 padding: 20px;
-cursor: pointer;
 `
 const ImageContainer = styled.div`
 width: 90%;
@@ -95,6 +129,7 @@ const DishImage = styled.img`
 width: 100%;
 height: 100%;
 display: inline-block;
+cursor: pointer;
 border-radius: 8px;
 `
 const FoodDetails = styled.div`
@@ -112,13 +147,25 @@ const FoodLike = styled.div`
 display: flex;
 margin: 25px 0 ;
 `
-const LikeImage = styled.img`
+const LikeLink = styled(Link)`
+display: flex;
+justify-content: center;
+align-items: center;
 width: 20px;
-display: block;
 margin-right: 10px;
+cursor: pointer;
+`
+const LikeImage = styled.img`
+display: block;
+width: 100%;
+cursor: pointer;
 `
 const LikeCount = styled.div`
 font-size: 12px;
+`
+const PostedBy = styled.h3`
+font-size: 16px;
+text-align: left;
 `
 const PostedDate = styled.h4`
 font-size: 16px;

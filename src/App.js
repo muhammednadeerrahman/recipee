@@ -61,7 +61,7 @@ function App() {
               <Route path="/edit/:id/" element={<Edit/>} />
               <Route path="/delete/:id/"  element={<Delete/>} />
               <Route path="/favourite"  element={<Favourite/>} />
-              <Route path="/search/:q/"  element={<Search/>} />
+              <Route path="/:q/"  element={<Search/>} />
 
             </Routes>
         </Router>
