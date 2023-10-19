@@ -23,6 +23,7 @@ def dishes(request):
     if filter : 
         ids = filter.split(",")
         instances = instances.filter(category__in=ids)
+        instances = instances.distinct()
 
     context = {
         "request" : request
