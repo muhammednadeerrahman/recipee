@@ -11,16 +11,23 @@ export default function Dishes() {
 
 	const [dishes , setDishes] = useState([])
     const [category, setCategory] = useState([])
+	const [selectedCategories, setSelectedCategories] = useState([]);
 
 	const {userdata,updateUserData} = useContext(userContext)
 
 	const navigate = useNavigate()
 
 	useEffect(()=>{
+
+		const categoryFilter = selectedCategories.join(',');
+
 		axios.get("http://127.0.0.1:8018/api/v1/dishes/",
 		{headers : {
 			Authorization : `Bearer ${userdata?.access}`,
 		},
+		params: {
+			filter: categoryFilter, 
+		  },
 	})
 		.then(function(response){
 			console.log(response.data.data)
@@ -47,7 +54,7 @@ export default function Dishes() {
 		})
 
 
-	},[])
+	},[selectedCategories])
 
 
 
@@ -111,6 +118,19 @@ export default function Dishes() {
 		)
 		
 	}
+	const handleCategoryChange = (categoryId,checked)=>{
+
+		if (checked){
+			setSelectedCategories([...selectedCategories,categoryId])
+		}
+		else{
+			setSelectedCategories(selectedCategories.filter((id)=>id !== categoryId))
+		}
+		const categoryFilter = selectedCategories.join(',');
+
+  		navigate(`?categories=${categoryFilter}`);
+
+	}
 
 
   return (
@@ -138,7 +158,14 @@ export default function Dishes() {
 						<CategoryLists>
 							{category.map((categories)=>(
 								<Category  key={categories.id}>											
-									<CategoryCheckBox id={categories.id} type='checkbox'/><CategoryLabel for={categories.id}> {categories.name}</CategoryLabel>
+									<CategoryCheckBox 
+										id={categories.id} 
+										type='checkbox'
+										checked = {selectedCategories.includes(categories.id)}
+										onChange={(e)=> handleCategoryChange(categories.id, e.target.checked)}
+										
+									/>
+									<CategoryLabel for={categories.id}> {categories.name}</CategoryLabel>
 								</Category>
 							))}
 						</CategoryLists>
