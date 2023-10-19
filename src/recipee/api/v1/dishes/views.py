@@ -19,6 +19,11 @@ def dishes(request):
     if q :
         instances = instances.filter(dish_name__icontains = q)
 
+    filter = request.GET.get("filter")
+    if filter : 
+        ids = filter.split(",")
+        instances = instances.filter(category__in=ids)
+
     context = {
         "request" : request
     }
