@@ -14,7 +14,6 @@ urlpatterns = [
     path('mypost/edit/<uuid:id>/', views.edit),
     path('likes/<uuid:id>/', views.postLikes),
 
-    # path('mypost/edit/<uuid:pk>/', views.DishUpdateView.as_view(), name='dish-update'),
 
     
 ] 

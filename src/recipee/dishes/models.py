@@ -17,6 +17,7 @@ class Dish (models.Model):
     like = models.ManyToManyField("auth.User")
     class Meta: 
         verbose_name_plural = "Dishes"
+        ordering = ["-date"]
 
     def __str__(self):
         return self.dish_name
