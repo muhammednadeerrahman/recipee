@@ -7,7 +7,9 @@ import { userContext } from '../../App'
 
 export default function Mypost() {
 	const [myposts, setMyposts] = useState([])
+
 	const {userdata} = useContext(userContext)
+
 	const navigate = useNavigate()
 
 	useEffect(()=>{
@@ -35,7 +37,13 @@ export default function Mypost() {
 						<FoodNameContainer>
 							<FoodName>{post.dish_name}</FoodName>
 							<FoodLike>
-								<LikeImage src={require("../images/likebutton.png")}  />
+							{ (post.is_liked == false) ?
+								 (
+									<LikeLink onClick={()=>handleLike(post.id)} ><LikeImage src={require("../images/heart1.png")} /></LikeLink>
+								 ):
+								 (
+									<LikeLink onClick={()=>handleLike(post.id)} ><LikeImage src={require("../images/heart2.png")} /></LikeLink>
+								 )}
 								<LikeCount> {post.like} likes</LikeCount>
 							</FoodLike>
 						</FoodNameContainer>
@@ -82,6 +90,32 @@ export default function Mypost() {
 			// Handle errors
 		});
 	}
+
+	let handleLike = (id) => {
+
+		console.log(id)
+		axios.post(`http://127.0.0.1:8018/api/v1/dishes/likes/${id}/`,{},
+		{headers : {
+			Authorization : `Bearer ${userdata?.access}`,
+		},
+	})
+		.then(function(response){
+			console.log(response.data)
+			axios.get("http://127.0.0.1:8018/api/v1/dishes/mypost/",
+			{headers : {
+				Authorization : `Bearer ${userdata?.access}`,
+			},
+		})
+			.then(function(response){
+				console.log(response.data.data)
+                setMyposts(response.data.data)
+			})
+		})
+		.catch(function(error) {
+			console.log(error)
+		  });
+	}
+
 		
 
   return (
@@ -153,10 +187,18 @@ const FoodLike = styled.div`
 display: flex;
 margin: 25px 0 ;
 `
-const LikeImage = styled.img`
+const LikeLink = styled(Link)`
+display: flex;
+justify-content: center;
+align-items: center;
 width: 20px;
-display: block;
 margin-right: 10px;
+cursor: pointer;
+`
+const LikeImage = styled.img`
+display: block;
+width: 100%;
+cursor: pointer;
 `
 const LikeCount = styled.div`
 font-size: 12px;

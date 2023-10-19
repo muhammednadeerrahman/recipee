@@ -16,34 +16,71 @@ export default function Dishes() {
 	const {userdata,updateUserData} = useContext(userContext)
 
 	const navigate = useNavigate()
+	
 
 	useEffect(()=>{
+	  
+		if (selectedCategories.length !== 0) {
+			const categoryFilter = selectedCategories.join(',');
 
-		const categoryFilter = selectedCategories.join(',');
+		  	navigate(`?filter=${categoryFilter}`)
 
-		axios.get("http://127.0.0.1:8018/api/v1/dishes/",
-		{headers : {
-			Authorization : `Bearer ${userdata?.access}`,
-		},
-		params: {
-			filter: categoryFilter, 
-		  },
-	})
-		.then(function(response){
-			console.log(response.data.data)
-			setDishes(response.data.data)
+			axios.get("http://127.0.0.1:8018/api/v1/dishes/",
+			{ headers : {
+				  Authorization : `Bearer ${userdata?.access}`,
+			  },
+			  params : {filter: categoryFilter},
+			})
+			.then(function(response){
+				console.log(response.data.data)
+				setDishes(response.data.data)
 
-		})
-		.catch(function(error){
-			console.log(error)
-		})
+			})
+			.catch(function(error){
+				console.log(error)
+			})
+			
+
+		}else{
+			navigate("/")
+
+			axios.get("http://127.0.0.1:8018/api/v1/dishes/",
+			{headers : {
+				Authorization : `Bearer ${userdata?.access}`,
+			},
+			})
+			.then(function(response){
+				console.log(response.data.data)
+				setDishes(response.data.data)
+
+			})
+			.catch(function(error){
+				console.log(error)
+			})
+
+			}
+		
+	// 	axios.get("http://127.0.0.1:8018/api/v1/dishes/",
+	// 	{headers : {
+	// 		Authorization : `Bearer ${userdata?.access}`,
+	// 	},
+	// 	params: params,
+	// })
+		// .then(function(response){
+		// 	console.log(response.data.data)
+		// 	setDishes(response.data.data)
+
+		// })
+		// .catch(function(error){
+		// 	console.log(error)
+		// })
 
 
 		axios.get("http://127.0.0.1:8018/api/v1/dishes/create/get_categories/",
-		{headers : {
-			Authorization : `Bearer ${userdata?.access}`,
-		},
-	})
+			{headers : {
+				Authorization : `Bearer ${userdata?.access}`,
+			},
+		})
 		.then(function(response){
 			console.log(response.data)
 			setCategory(response.data)
@@ -53,6 +90,7 @@ export default function Dishes() {
 			console.log(error)
 		})
 
+	
 
 	},[selectedCategories])
 
@@ -127,8 +165,7 @@ export default function Dishes() {
 			setSelectedCategories(selectedCategories.filter((id)=>id !== categoryId))
 		}
 		const categoryFilter = selectedCategories.join(',');
-
-  		navigate(`?categories=${categoryFilter}`);
+	
 
 	}
 
@@ -169,9 +206,6 @@ export default function Dishes() {
 								</Category>
 							))}
 						</CategoryLists>
-						<SectionFilter>
-							<SectionButton>Filter</SectionButton>
-						</SectionFilter>
 					</SectionCategories>
 				</RightSectionDishes>
 			</SectionDishes>

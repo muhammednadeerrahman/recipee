@@ -213,6 +213,7 @@ font-size: 20px;
 line-height: 1.7em;
 text-align: left;
 margin: 20px 0;
+min-height: 200px;
 
 
 `
