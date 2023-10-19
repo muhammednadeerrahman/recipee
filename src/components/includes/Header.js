@@ -9,8 +9,6 @@ export default function Header() {
     const [isNav,setIsNav] = useState(false)
     const [search, setSearch] = useState("")
 
-
-
     const {userdata,updateUserData} = useContext(userContext)
     const navigate = useNavigate()
 
@@ -19,8 +17,12 @@ export default function Header() {
         updateUserData({type : "LOGOUT"})
     }
 
+	let handleKeyPress = (e)=>{
+		if (e.key == 'Enter'){
+			navigate(`/search/${search}/`)
+		}
+	}
     
-
 
   return (
     <>
@@ -40,6 +42,23 @@ export default function Header() {
                         </SectionLogo>
                     </SectionNav>
                 </SectionLeft>
+                <SectionMiddle> 
+                    <SectionContainer>
+                        <SectionSearchIcon>
+                            <SearchImage src={require("../images/search.png")} alt="search icon"  />
+                        </SectionSearchIcon>
+                        <SectionInput>
+                                <SearchInput 
+                                    placeholder='type here to search...' 
+                                    name='q'
+                                    value={search}
+                                    onChange={(e)=>setSearch(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+           
+                                />
+                        </SectionInput>
+                    </SectionContainer>
+                </SectionMiddle>
                 <SectionRight>
                 {userdata ? 
                    ( <NavList>
@@ -160,41 +179,41 @@ display: block;
 height: 100%;
 width: 100%;
 `
-// const SectionMiddle = styled.div`
-// width: 55%;
-// background-color: #ffbe4b;
-// padding: 20px;
-// border-radius:10px;
+const SectionMiddle = styled.div`
+width: 55%;
+background-color: #ffbe4b;
+padding: 20px;
+border-radius:10px;
 
-// `
-// const SectionContainer = styled.div`
-// display: flex;
-// justify-content: center;
-// align-items: center;
+`
+const SectionContainer = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
 
-// `
-// const SectionSearchIcon = styled.div`
-// width: 15px;
-// margin-right: 15px;
+`
+const SectionSearchIcon = styled.div`
+width: 15px;
+margin-right: 15px;
 
-// `
-// const SearchImage = styled.img`
-// display: block;
-// width: 100%;
-// `
-// const SectionInput = styled.div`
-// width: 80%;
-// `
-// const SearchInput = styled.input`
-// display:block;
-// width:100%;
-// background-color: #ffbe4b;
-// border: 0px;
-// &:focus{
-//     outline: none;
-// }
+`
+const SearchImage = styled.img`
+display: block;
+width: 100%;
+`
+const SectionInput = styled.div`
+width: 80%;
+`
+const SearchInput = styled.input`
+display:block;
+width:100%;
+background-color: #ffbe4b;
+border: 0px;
+&:focus{
+    outline: none;
+}
 
-// `
+`
 const SectionRight = styled.div`
 width: 15%;
 display: flex;

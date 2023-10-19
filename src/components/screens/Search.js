@@ -1,25 +1,30 @@
 import React,{useContext, useEffect, useState} from 'react'
 import Helmet from "react-helmet"
-import { useNavigate,Link } from 'react-router-dom'
+import { useNavigate,Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Header from '../includes/Header'
 import axios from "axios"
 import { userContext } from '../../App'
 
-export default function Dishes() {
-	const [username, setUsername] = useState("")
+
+export default function Search() {
+    const [username, setUsername] = useState("")
     const [isNav,setIsNav] = useState(false)
 	const [dishes , setDishes] = useState([])
 	const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("")
+
+    const {q} = useParams()
+    console.log(q)
 
 
 	const {userdata,updateUserData} = useContext(userContext)
 	const navigate = useNavigate()
 
 	useEffect(()=>{
-		axios.get("http://127.0.0.1:8018/api/v1/dishes/",
-		{headers : {
+		axios.get(`http://127.0.0.1:8018/api/v1/dishes/`,
+		{   params: { q: q },
+            headers : {
 			Authorization : `Bearer ${userdata?.access}`,
 		},
 	})
@@ -34,7 +39,7 @@ export default function Dishes() {
 		})
 		setLoading(false);
 
-	},[])
+	},[q])
 
 	
 	const HeartIcon = ({ isLiked }) => {

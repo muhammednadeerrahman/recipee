@@ -14,6 +14,7 @@ import Profile from "./components/screens/Profile";
 import Delete from "./components/screens/Delete";
 import Edit from "./components/screens/Edit";
 import Favourite from "./components/screens/Favourite";
+import Search from "./components/screens/Search";
 
 export const userContext = React.createContext()
 
@@ -60,6 +61,7 @@ function App() {
               <Route path="/edit/:id/" element={<Edit/>} />
               <Route path="/delete/:id/"  element={<Delete/>} />
               <Route path="/favourite"  element={<Favourite/>} />
+              <Route path="/search/:q/"  element={<Search/>} />
 
             </Routes>
         </Router>
