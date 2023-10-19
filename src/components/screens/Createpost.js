@@ -38,8 +38,8 @@ export default function Createpost() {
         return(
             category.map((categories)=>(
                 <>
-                <li key={categories.id}>
-                    <CategoryLabel >{categories.name}</CategoryLabel>
+                <CategoryContainer key={categories.id}>
+                    <CategoryLabel for={categories.id}>{categories.name}</CategoryLabel>
                         <CategoryInput
                             type="checkbox"
                             id={categories.id}
@@ -48,7 +48,7 @@ export default function Createpost() {
                             onChange={handleCheckboxChange}
                         />
 
-                </li>
+                </CategoryContainer>
                    
                 </>
             ))
@@ -127,10 +127,10 @@ export default function Createpost() {
                 </TitleContainer>
                 <TitleContainer>
                     <CategoryTitle>Category</CategoryTitle>
-                    <ul>
+                    <CategoryList>
                         {categoryList()}
 
-                    </ul>
+                    </CategoryList>
 
                 </TitleContainer>
                 <TitleContainer>
@@ -190,9 +190,27 @@ outline: none;
 `
 
 
-const CategoryTitle = styled(DishTitle)``
+const CategoryTitle = styled(DishTitle)`
+
+`
+const CategoryList = styled.ul`
+display: flex;
+flex-wrap: wrap;
+
+
+
+`
+const CategoryContainer = styled.li`
+margin-right:30px;
+
+`
+
 const CategoryLabel = styled.label`
+margin-right: 10px;
 color:black;
+font-size: 20px;
+font-weight: bold;
+cursor:pointer;
 `
 const CategoryInput = styled.input``
 

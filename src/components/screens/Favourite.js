@@ -5,20 +5,21 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { userContext } from '../../App'
 
-export default function Mypost() {
-	const [myposts, setMyposts] = useState([])
+export default function Favourite() {
+    const [mylikes, setMylikes] = useState([])
 	const {userdata} = useContext(userContext)
 	const navigate = useNavigate()
 
 	useEffect(()=>{
-		axios.get("http://127.0.0.1:8018/api/v1/dishes/mypost/",
+		axios.get("http://127.0.0.1:8018/api/v1/dishes/",
 			{headers : {
 				Authorization : `Bearer ${userdata?.access}`,
 			},
 		})
 		.then(function(response){
 			console.log(response.data.data)
-			setMyposts(response.data.data)
+            const likedPost= response.data.data.filter((post)=> post.is_liked == true)
+			setMylikes(likedPost)
 		})
 		.catch(function(error){
 			console.log(error)
@@ -26,8 +27,8 @@ export default function Mypost() {
 	},[])
 	let myPost = () =>{
 		return(
-			myposts.map((post)=>(
-				<DishItem  key = {post.id}   >
+			mylikes.map((post)=>(
+				<DishItem  key = {post.id} onClick={()=> navigate(`/dish/${post.id}`) }  >
 					<ImageContainer>
 						<DishImage src={post.featured_image} alt="food" />
 					</ImageContainer>
@@ -36,53 +37,15 @@ export default function Mypost() {
 							<FoodName>{post.dish_name}</FoodName>
 							<FoodLike>
 								<LikeImage src={require("../images/likebutton.png")}  />
-								<LikeCount> 22 likes</LikeCount>
+								<LikeCount> {post.like} likes</LikeCount>
 							</FoodLike>
 						</FoodNameContainer>
 						<PostedDate>{post.date}</PostedDate>
-						<PostChange>
-							<EditPost to = {`/edit/${post.id}/`} >
-								<EditImageContanier>
-									<EditImage src={require("../images/edit.svg").default} alt="EditImage" />
-								</EditImageContanier>
-								<EditTitle>edit</EditTitle>
-							</EditPost>
-							<DeletePost onClick = {()=>deletePost(post.id)}>
-								<DeleteImageContanier>
-									<DeleteImage src={require("../images/delete.svg").default} alt="DeleteImage" />
-								</DeleteImageContanier>
-								<DeleteTitle >delete</DeleteTitle>
-							</DeletePost>
-						</PostChange>
 					</FoodDetails>
             	</DishItem>
 				))
 		)
 	}
-
-	let deletePost = (id) => {
-		const formField = new FormData();
-		formField.append("is_deleted", true);
-	
-		axios({
-			method: "post",
-			url: `http://127.0.0.1:8018/api/v1/dishes/mypost/delete/${id}/`,
-			data: formField,
-			headers: {
-				Authorization: `Bearer ${userdata?.access}`,
-			},
-		})
-		.then(function(response){
-			console.log(response.data);
-			navigate("/")
-			// Handle success, such as removing the post from your state
-		})
-		.catch(function(error){
-			console.log(error);
-			// Handle errors
-		});
-	}
-		
 
   return (
     <>
@@ -91,7 +54,7 @@ export default function Mypost() {
           	<SectionTop>
             	<PostNumber>
             		<PostNoTitle>No. of Posts : </PostNoTitle>
-              		<PostNo> {myposts.length} Post Available </PostNo>
+              		<PostNo> {mylikes.length} Post Available </PostNo>
             	</PostNumber>
           	</SectionTop>
          	<SectionBottom>
@@ -123,10 +86,6 @@ width: 30%;
 margin: 30px 30px 0 0;
 padding: 20px;
 cursor: pointer;
-align-items: center;
-display: flex;
-justify-content: center;
-flex-direction: column;
 `
 const ImageContainer = styled.div`
 width: 90%;
@@ -165,43 +124,4 @@ const PostedDate = styled.h4`
 font-size: 16px;
 text-align: left;
 `
-const PostChange = styled.div`
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-top: 20px;
-`
-const EditPost = styled(Link)`
-display: flex;
-align-items: flex-end;
-background-color: #ffaa11;
-padding: 0 10px;
-border-radius: 8px;
-
-
-`
-const EditImageContanier = styled.span`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 20px;
-	padding: 5px;
-
-`
-const EditImage = styled.img`
-width: 15px;
-display: block;
-`
-const EditTitle = styled.h5`
-color:#fff;
-font-weight: 300;
-font-size: 10px;
-`
-
-const DeletePost = styled(EditPost)`
-background-color: red;
-`
-const DeleteImageContanier = styled(EditImageContanier)``
-const DeleteImage = styled(EditImage)``
-const DeleteTitle = styled(EditTitle)``
 

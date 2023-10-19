@@ -1,19 +1,25 @@
 import React, { useContext, useEffect,useState } from 'react'
 import styled from "styled-components"
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import { userContext } from '../../App'
 
 export default function Header() {
+
     const [username, setUsername] = useState("")
     const [isNav,setIsNav] = useState(false)
+    const [search, setSearch] = useState("")
+
+
+
     const {userdata,updateUserData} = useContext(userContext)
+    const navigate = useNavigate()
 
-    useEffect(()=>{
 
-            
-        
+    const handleLog = () =>{
+        updateUserData({type : "LOGOUT"})
+    }
 
-    },[])
+    
 
 
   return (
@@ -34,20 +40,12 @@ export default function Header() {
                         </SectionLogo>
                     </SectionNav>
                 </SectionLeft>
-                <SectionMiddle> 
-                    <SectionContainer>
-                        <SectionSearchIcon>
-                            <SearchImage src={require("../images/search.png")} alt="search icon" />
-                        </SectionSearchIcon>
-                        <SectionInput>
-                            <SearchInput placeholder='type here to search...' />
-                        </SectionInput>
-                    </SectionContainer>
-                </SectionMiddle>
                 <SectionRight>
                 {userdata ? 
                    ( <NavList>
-                        <LoginButton >Log out</LoginButton>
+                        <NavImageContainer to= "/createpost" title='createpost' ><NavImages src={require("../images/create.png")} /></NavImageContainer>
+                        <NavImageContainer to= "/favourite" title='favourites' ><NavImages src={require("../images/favourite.png")} /></NavImageContainer>
+                        <NavImageContainer to= "/mypost" title='favourites' ><NavImages src={require("../images/mypost.png")} /></NavImageContainer>
                     </NavList>):
                     (
                     <NavList>
@@ -62,7 +60,13 @@ export default function Header() {
             <SectionMainNav className={isNav ? 'visible' :'hidden'}>
                 <SectionNavLeft>
                     <LogStatus>
-                        <LogButton  to = "/login">Logout</LogButton>
+                        { userdata ? (
+                            <LogButton  onClick={()=>handleLog()}>Logout</LogButton>
+                        ):
+                        (
+                            <LogButton  to="/login" >Log in</LogButton>
+                        )}
+                        
                     </LogStatus>
                     <SectionNavTop>
                         <ProfileImageContainer>
@@ -156,41 +160,41 @@ display: block;
 height: 100%;
 width: 100%;
 `
-const SectionMiddle = styled.div`
-width: 55%;
-background-color: #ffbe4b;
-padding: 20px;
-border-radius:10px;
+// const SectionMiddle = styled.div`
+// width: 55%;
+// background-color: #ffbe4b;
+// padding: 20px;
+// border-radius:10px;
 
-`
-const SectionContainer = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
+// `
+// const SectionContainer = styled.div`
+// display: flex;
+// justify-content: center;
+// align-items: center;
 
-`
-const SectionSearchIcon = styled.div`
-width: 15px;
-margin-right: 15px;
+// `
+// const SectionSearchIcon = styled.div`
+// width: 15px;
+// margin-right: 15px;
 
-`
-const SearchImage = styled.img`
-display: block;
-width: 100%;
-`
-const SectionInput = styled.div`
-width: 80%;
-`
-const SearchInput = styled.input`
-display:block;
-width:100%;
-background-color: #ffbe4b;
-border: 0px;
-&:focus{
-    outline: none;
-}
+// `
+// const SearchImage = styled.img`
+// display: block;
+// width: 100%;
+// `
+// const SectionInput = styled.div`
+// width: 80%;
+// `
+// const SearchInput = styled.input`
+// display:block;
+// width:100%;
+// background-color: #ffbe4b;
+// border: 0px;
+// &:focus{
+//     outline: none;
+// }
 
-`
+// `
 const SectionRight = styled.div`
 width: 15%;
 display: flex;
@@ -200,6 +204,15 @@ margin-left: 20px;
 const NavList = styled.div`
 display: flex;
 align-items: center;
+`
+const NavImageContainer = styled(Link)`
+display: block;
+width: 30px;
+margin-left: 30px;
+`
+const NavImages = styled.img`
+display: block;
+width: 100%;
 `
 const LoginButton = styled(Link)`
 margin-right: 20px;
