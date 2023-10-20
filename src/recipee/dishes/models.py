@@ -38,8 +38,6 @@ class UserProfile (models.Model):
     profile_image = models.FileField(upload_to="profile/",blank=True,null=True)
     id = models.UUIDField(primary_key=True,default=uuid.uuid4)
 
-    def __str__(self):
-        return self.phone
 
 
 class Comment (models.Model):

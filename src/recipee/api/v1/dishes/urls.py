@@ -16,5 +16,7 @@ urlpatterns = [
     path('comment/<uuid:id>/', views.postComment),
     path('list/comments/<uuid:id>/', views.listComment),
     path('profile/', views.profile),
+    path('profile/view/', views.profileDetails),
+    
 
 ] 

@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import AllowAny
 
 from django.contrib.auth.models import User 
+from dishes.models import UserProfile
 
 @permission_classes([AllowAny])
 @api_view(["POST"])
@@ -15,6 +16,7 @@ def create(request):
     email = request.data["email"]
     name = request.data["name"]
     password = request.data["password"]
+    
 
     if not User.objects.filter(username=email).exists():
         User.objects.create_user(
@@ -22,6 +24,12 @@ def create(request):
             first_name = name,
             password = password
         )
+        UserProfile.objects.create(
+            name = request.user,
+
+        )
+
+
         headers= {
             "Content-Type" : "application/json"
         }

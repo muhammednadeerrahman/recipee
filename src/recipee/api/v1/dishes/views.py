@@ -6,7 +6,7 @@ from rest_framework.generics import UpdateAPIView
 
 from dishes.models import Dish, Category, Comment, UserProfile
 from api.v1.dishes.serializers import DishesSerializer,RecipeeSerializer, CategorySerializer,\
-DeleteSerializer,EditSerializer, CommentSerializer
+DeleteSerializer,EditSerializer, CommentSerializer, ProfileSerializer,EditProfileSerializer
 
 
 @api_view(["GET"])
@@ -303,30 +303,97 @@ def listComment(request, id):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def profile(request):
-    name = request.user
-    phone = request.data["phone"]
-    try: 
-        profile_image = request.data["profile_image"]
-    except:
-        profile_image = None
+    if UserProfile.objects.filter(name = request.user).exists():
+        instance = UserProfile.objects.get(name = request.user)
+
+        context = {
+            "request" : request
+        }
+        serializer = EditProfileSerializer(instance, data=request.data, context = context)
+        if serializer.is_valid():
+            serializer.save()
+
+            response_data = {
+                "status_code" : 6000,
+                "message" : "successfully updated"
+            }
+
+            return Response(response_data)
+        else :
+
+            response_data = {
+                "status_code" : 6001,
+                "message" : "validation_error",
+                "data" : serializer.errors
+            }
+                    
+            return Response(response_data)
+        
+    else:
+            response_data = {
+                            "status_code" : 6001,
+                            "message" : "user not found",
+                        }
+                                
+            return Response(response_data)
+
+        # name = request.user
+        # phone = request.data["phone"]
+        # try: 
+        #     profile_image = request.data["profile_image"]
+        # except:
+        #     profile_image = None
+
+        # try: 
+        #     phone = request.data["phone"]
+        # except:
+        #     phone = None
+
+        # if request.user :
+        #     instance = UserProfile.objects.create(
+        #         name = name,
+
+        #     )
+        #     if phone :
+        #         instance.phone = phone
+        #         instance.save()
+
+        #     if profile_image :
+        #         instance.profile_image = profile_image
+        #         instance.save()
+
+        #     response_data =  {
+        #             "status_code" : 6000,
+
+        #             "message" : "userupdated successfully"                                                                                     
+        #         }
+        #     return Response(response_data)
+        # else:
+        #     response_data =  {
+        #         "status_code" : 6001,
+        #         "message" : "oops..! user not found"
+        #     }
+        #     return Response (response_data)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def profileDetails(request):
     if request.user :
-        instance = UserProfile.objects.create(
-            name = name,
-            phone = phone
+        instance = UserProfile.objects.get(name=request.user)
+        context = {
+            "request" : request
+        }
 
-        )
-        if profile_image :
-            instance.profile_image = profile_image
-            instance.save()
+        serializer = ProfileSerializer(instance, context = context)
 
         response_data =  {
                 "status_code" : 6000,
-
-                "message" : "userupdated successfully"                                                                                     
+                "data" : serializer.data,
+                "message" : "success"
             }
-        return Response(response_data)
+        
+        return Response (response_data)
     else:
         response_data =  {
             "status_code" : 6001,

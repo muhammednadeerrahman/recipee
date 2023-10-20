@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import SerializerMethodField
 from rest_framework import serializers
-from dishes.models import Dish , Category, Comment
+from dishes.models import Dish , Category, Comment, UserProfile
 
 
 
@@ -91,4 +91,28 @@ class CommentSerializer(ModelSerializer):
 
         return instance.username.first_name
     
+class ProfileSerializer(ModelSerializer):
 
+    name = SerializerMethodField()
+    email = SerializerMethodField()
+
+    class Meta :
+        model = UserProfile
+        fields = ("profile_image","name","phone","email")
+    
+    def get_name(self,instance):
+        request = self.context.get("request")
+
+        return instance.name.first_name
+    
+        
+    def get_email(self,instance):
+        request = self.context["request"].user
+        return request.username
+    
+
+class EditProfileSerializer(ModelSerializer):
+
+    class Meta :
+        model = UserProfile
+        fields = ("profile_image","phone")

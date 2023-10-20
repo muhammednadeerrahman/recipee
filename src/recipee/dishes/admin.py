@@ -11,8 +11,9 @@ admin.site.register(Dish,AdminDish)
 
 admin.site.register(Category)
 
-
-admin.site.register(UserProfile)
+class AdminUserProfile(admin.ModelAdmin):
+    list_display = ["name","phone"]
+admin.site.register(UserProfile, AdminUserProfile)
 
 
 admin.site.register(Comment)
