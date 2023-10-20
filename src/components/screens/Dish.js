@@ -7,6 +7,7 @@ import { userContext } from '../../App'
 
 export default function Dish() {
 	const [recipee,setRecipee] =useState([])
+	const [comment,setComment] =useState("")
 	const [likes , setLikes] = useState(0)
 	const [isLiked , setIsLiked] = useState(false)
 
@@ -67,7 +68,16 @@ export default function Dish() {
 			console.log(error)
 		  });
 	}
-	
+	let handleCommentSubmit = (e)=>{
+		e.preventDefault()
+
+		axios.post(`http://127.0.0.1:8018/api/v1/dishes/comment/${id}/`,{comment : comment},
+		{headers : {
+			Authorization : `Bearer ${userdata?.access}`,
+		},
+		
+		})
+	}
 
 
 
@@ -119,8 +129,11 @@ export default function Dish() {
 			<Comments>
 				<CommentTitle>Comments</CommentTitle>
 				<CommentSection>
-					<CommentInput></CommentInput>
-					<CommentButton>Post</CommentButton>
+					<CommentForm onSubmit={handleCommentSubmit}>
+						<CommentInput placeholder='comment..' value={comment} onChange={(e)=>setComment(e.target.value)} />
+						<CommentButton>Post</CommentButton>
+					</CommentForm>
+
 				</CommentSection>
 				<CommentsList>
 					<Comment>
@@ -275,6 +288,11 @@ const CommentSection = styled.div`
 display: flex;
 
 `
+const CommentForm = styled.form`
+width: 100%;
+display: flex;
+`
+
 const CommentInput = styled.input`
 width: 80%;
 padding:15px;
