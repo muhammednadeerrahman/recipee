@@ -1,44 +1,121 @@
-import React from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import Header from '../includes/Header'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { userContext } from '../../App'
 
 export default function Profile() {
+
+    const [userDetails, setUserDetails] = useState([])
+    const [profileImage, setProfileImage] = useState(null)
+    const [phone, setPhone] = useState("")
+
+
+
+    const {userdata,updateUserData} = useContext(userContext)
+
+    const navigate = useNavigate()
+
+
+    useEffect(()=>{
+        axios.get("http://127.0.0.1:8018/api/v1/dishes/profile/view/",
+        {headers : {
+            Authorization : `Bearer ${userdata?.access}`,
+        },
+    })
+    .then(function(response){
+            console.log(response.data.data)
+            setUserDetails(response.data.data)
+        })
+    .catch(function(error) {
+        console.log(error)
+      });
+    },[])
+
+    let handleSubmit = (e)=>{
+        e.preventDefault()
+
+        const formField = new FormData()
+
+        formField.append('phone',phone)
+
+        if(profileImage !== null){
+            formField.append('profile_image',profileImage)
+        }
+        axios({
+            method : "post",
+            url: "http://127.0.0.1:8018/api/v1/dishes/profile/",
+            data : formField,
+            headers : {
+                Authorization : `Bearer ${userdata?.access}`,
+            },
+        })
+        .then(function(response){
+            console.log(response.data.data)
+            navigate("/")
+        })
+        .catch(function(error) {
+            console.log(error)
+        });
+
+
+    }
+
   return (
     <>
         <Header/>
         <SectionProfile>
-           <SectioncontainerForm>
+           <SectioncontainerForm onSubmit={handleSubmit} >
                 <SectionTop>
                     <SectionImageContainer>
-                        <ProfileImage src={require("../images/profile_demo.png")} alt="profileImage" />
+
+                        { (userDetails.profile_image !== null) ? (
+                            <ProfileImage src={userDetails.profile_image}alt="profileIMage"/>)
+                            :(
+                             <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
+                        )}                    
                     </SectionImageContainer>
-                    <SectionChangeImage>
-                        <ChangeImageTitle>change profile image</ChangeImageTitle>
-                        <ImageEditContainer>
-                            <EditImage src={require("../images/edit.svg").default} alt="editPencil image" />
-                        </ImageEditContainer>
-                    </SectionChangeImage>
+                    { (userDetails.profile_image !== null) ? (
+                        <SectionChangeImage>
+                            <ChangeImageTitle>change profile image</ChangeImageTitle>
+                            <ImageEditContainer>
+                                <EditImage src={require("../images/edit.svg").default} alt="editPencil image" />
+                            </ImageEditContainer>
+                        </SectionChangeImage>)
+                    :(
+                        <SectionChange>
+                        <ImageInputContainer>
+                            <Imageinput type="file" accept='image' onChange={(e)=>setProfileImage(e.target.files[0])} />
+                        </ImageInputContainer>
+                        </SectionChange>
+                     )
+                    }
+                   
                 </SectionTop>
                 <SectionBottom>
                     <DetailContainer>
-                        <Title>First Name : </Title>
-                        <Detail>Muhammed</Detail>
-                    </DetailContainer>
-                    <DetailContainer>
-                        <Title>Last Name : </Title>
-                        <Detail>Nadeer</Detail>
+                        <Title>Name : </Title>
+                        <Detail>{userDetails.name}</Detail>
                     </DetailContainer>
                     <DetailContainer>
                         <Title>Email : </Title>
-                        <Detail>mohdnadeerrahman@gmail.com</Detail>
+                        <Detail>{userDetails.email}</Detail>
                     </DetailContainer>
                     <DetailContainer>
                         <Title>Mobile : </Title>
-                        <Detail>9746880016</Detail>
-                        <EditImageContainer>
+                        {userDetails.phone ? 
+                            (<Detail>{userDetails.phone}</Detail>)
+                            :(<DetailInput placeholder value={phone} onChange={(e)=>setPhone(e.target.value)} />)
+                        }       
+                        
+                       {userDetails.phone ?
+                        (<EditImageContainer>
                             <Edit src={require("../images/edit.svg").default} alt= "Edit" />
-                        </EditImageContainer>
+                         </EditImageContainer>)
+                        :(<>
+                            
+                        </>)}
                     </DetailContainer>
                 </SectionBottom>
                 <SectionSubmit>
@@ -85,6 +162,12 @@ width: 100%;
 display: block;
 `
 const SectionChangeImage = styled(Link)`
+display: flex;
+align-items: flex-start;
+margin: 10px 0 20px;
+
+`
+const SectionChange = styled.div`
 display: flex;
 align-items: flex-start;
 margin: 10px 0 20px;
@@ -139,6 +222,13 @@ background-color: #eee;
 display: inline-block;
 
 `
+const DetailInput = styled.input`
+border-radius: 8px;
+padding: 8px 10px;
+display: block;
+margin-right:5px
+
+`
 const EditImageContainer = styled(Link)`
 background-color: #381a5a;
 width: 20px;
@@ -149,6 +239,14 @@ justify-content: center;
 border-radius: 6px;
 
 `
+const ImageInputContainer = styled.div`
+
+`
+const Imageinput = styled.input`
+
+`
+
+
 const Edit = styled.img`
 display: block;
 width: 10px;
