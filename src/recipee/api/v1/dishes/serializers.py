@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import SerializerMethodField
 from rest_framework import serializers
-from dishes.models import Dish , Category
+from dishes.models import Dish , Category, Comment
 
 
 
@@ -77,3 +77,10 @@ class DeleteSerializer(ModelSerializer):
     class Meta : 
         model = Dish
         fields = ("id","is_deleted")
+
+class CommentSerializer(ModelSerializer):
+    class Meta :
+        model = Comment
+        fields = ("id","profile_image","date","comment","username", "is_deleted","parent_comment")
+
+

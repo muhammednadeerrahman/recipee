@@ -4,9 +4,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.generics import UpdateAPIView
 
-from dishes.models import Dish, Category
+from dishes.models import Dish, Category, Comment, UserProfile
 from api.v1.dishes.serializers import DishesSerializer,RecipeeSerializer, CategorySerializer,\
-DeleteSerializer,EditSerializer
+DeleteSerializer,EditSerializer, CommentSerializer
 
 
 @api_view(["GET"])
@@ -235,17 +235,70 @@ def postLikes(request, id):
         return Response (response_data)
 
 
-# @api_view(["POST"])
-# @permission_classes([AllowAny])
-# def postComment(request, id):
-#     if Dish.objects.filter(pk=id).exists():
-#         instance = Dish.objects.get(pk=id)
-#         comment = request.data["comment"]
-#         username = request.user.firstname
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def postComment(request, id):
+    if Dish.objects.filter(pk=id).exists():
+        instance = Dish.objects.get(pk=id)
+        comment = request.data["comment"]
+        username = request.user
 
-#         Comment.objects.create(
-#             comment = comment,
-#             username = username,
-#             profile_image = profile_image
+        try:
+            parent_comment = request.data["parent_comment"]
+        except:
+            parent_comment = None
 
-#         )
+        
+
+        Comment.objects.create(
+            comment = comment,
+            username = username,
+            dish = instance
+        )
+        if parent_comment:
+            if Comment.objects.filter(pk=parent_comment).exists():
+                parent = Comment.objects.get(pk=parent_comment)
+                instance.parent_comment = parent
+                instance.save()
+
+        response_data =  {
+                "status_code" : 6000,
+                "message" : "comment Succesfully posted"                                                                                     
+            }
+        return Response(response_data)
+    else:
+        response_data =  {
+            "status_code" : 6001,
+            "message" : "oops..! place not found"
+        }
+        return Response (response_data)
+    
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def listComment(request, id):
+    if Dish.objects.filter(pk=id).exists():
+        dish = Dish.objects.get(pk=id)
+        instance= Comment.objects.filter(dish=dish,parent_comment = None)
+        context = {
+            "request" : request
+        }
+
+        serializer = CommentSerializer(instance,many = True,context= context)
+
+        response_data =  {
+                "status_code" : 6000,
+                "data" : serializer.data,
+                "message" : "comment Succesfully posted"                                                                                     
+            }
+        return Response(response_data)
+    else:
+        response_data =  {
+            "status_code" : 6001,
+            "message" : "oops..! place not found"
+        }
+        return Response (response_data)
+    
+
+        
+    

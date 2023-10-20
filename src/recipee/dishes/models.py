@@ -47,11 +47,12 @@ class Comment (models.Model):
     parent_comment = models.ForeignKey('dishes.Comment',related_name="master_comment",blank=True,null=True,on_delete=models.CASCADE)
     comment = models.TextField()
     username = models.ForeignKey("auth.User",on_delete=models.CASCADE)
-    profile_image = models.ForeignKey("dishes.UserProfile",on_delete=models.CASCADE)
+    profile_image = models.ForeignKey("dishes.UserProfile",blank=True,null=True,on_delete=models.CASCADE)
     dish = models.ForeignKey("dishes.Dish",on_delete=models.CASCADE)    
     is_deleted = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+
 
     def __str__(self):
         return self.comment
