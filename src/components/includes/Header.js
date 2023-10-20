@@ -2,15 +2,32 @@ import React, { useContext, useEffect,useState } from 'react'
 import styled from "styled-components"
 import {Link, useNavigate} from "react-router-dom"
 import { userContext } from '../../App'
+import axios from 'axios'
 
 export default function Header() {
 
     const [username, setUsername] = useState("")
     const [isNav,setIsNav] = useState(false)
     const [search, setSearch] = useState("")
+    const [userDetails, setUserDetails] = useState([])
 
     const {userdata,updateUserData} = useContext(userContext)
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        axios.get("http://127.0.0.1:8018/api/v1/dishes/profile/view/",
+        {headers : {
+            Authorization : `Bearer ${userdata?.access}`,
+        },
+    })
+    .then(function(response){
+            console.log(response.data.data)
+            setUserDetails(response.data.data)
+        })
+    .catch(function(error) {
+        console.log(error)
+      });
+    },[])
 
 
     const handleLog = () =>{
@@ -89,11 +106,18 @@ export default function Header() {
                     </LogStatus>
                     <SectionNavTop>
                         <ProfileImageContainer>
-                            <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
+                            { (userDetails.profile_image !== null) ? (
+                                <ProfileImage src={userDetails.profile_image}alt="profileIMage"/>
+
+                            ):(
+                                <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
+                            )}
+                            
+                           
                         </ProfileImageContainer>
                         <ProfileDetails>
-                            <ProfileName>{username}</ProfileName>
-                            <ProfileEmail>modnadeerrahman@gmail.com</ProfileEmail>
+                            <ProfileName>{userDetails.name}</ProfileName>
+                            <ProfileEmail>{userDetails.email}</ProfileEmail>
                             <SectionProfile>
                                 <ProfileLink to ="/profile">view profile</ProfileLink>
                             </SectionProfile>
