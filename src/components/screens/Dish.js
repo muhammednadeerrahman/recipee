@@ -8,6 +8,7 @@ import { userContext } from '../../App'
 export default function Dish() {
 	const [recipee,setRecipee] =useState([])
 	const [comment,setComment] =useState("")
+	const [listComment,setListComment] =useState([])
 	const [likes , setLikes] = useState(0)
 	const [isLiked , setIsLiked] = useState(false)
 
@@ -30,13 +31,26 @@ export default function Dish() {
 			setLikes(response.data.data.like);
 			setIsLiked(response.data.data.is_liked);
 
-			
+		})
+		.catch(function(error){
+			console.log(error)
+		})
+
+		axios.get(`http://127.0.0.1:8018/api/v1/dishes/list/comments/${id}/`,
+		{headers : {
+			Authorization : `Bearer ${userdata?.access}`,
+		},
+		})
+		.then(function(response){
+			console.log(response.data.data)
+			setListComment(response.data.data)
 
 
 		})
 		.catch(function(error){
 			console.log(error)
 		})
+
 	},[])
 
 	let handleLike = (e) => {
@@ -77,6 +91,25 @@ export default function Dish() {
 		},
 		
 		})
+		.then(function (response) {
+			axios.get(`http://127.0.0.1:8018/api/v1/dishes/list/comments/${id}/`,
+			{headers : {
+				Authorization : `Bearer ${userdata?.access}`,
+			},
+			})
+			.then(function(response){
+				console.log(response.data.data)
+				setListComment(response.data.data)
+			})
+			.catch(function(error){
+				console.log(error)
+			})
+
+		})
+		.catch(function (error) {
+			   console.log(error);
+		});
+		setComment("")
 	}
 
 
@@ -136,15 +169,19 @@ export default function Dish() {
 
 				</CommentSection>
 				<CommentsList>
-					<Comment>
-						<CommentLeftContainer>
-							<UserImage src={require("../images/profile_demo.png")} alt ="userImage" />
-						</CommentLeftContainer>
-						<CommentRightSection>
-							<UserName>John</UserName>
-							<UserComment>lorem idsf ewasfwa ewasfwaq er5sywey e5ysys ergd ersyesr sddr hrf jrdrtr trttur  ewasgf wegaseewqqf esdf efe eagwsrg reagjinib bbhub ugyg er uygg ygb guygg</UserComment>
-						</CommentRightSection>
-					</Comment>
+					{listComment.map((comments)=>(
+						<Comment>
+							<CommentLeftContainer>
+								<UserImage src={require("../images/profile_demo.png")} alt ="userImage" />
+							</CommentLeftContainer>
+							<CommentRightSection>
+								<UserName>{comments.username} :</UserName>
+								<UserComment>{comments.comment}</UserComment>
+							</CommentRightSection>
+						</Comment>
+
+					))}
+					
 					
 				</CommentsList>
 			</Comments>
@@ -276,6 +313,8 @@ margin-top: 20px;
 `
 const Comments = styled.div`
 margin-top: 35px;
+background-color: #eee;
+padding: 20px;
 
 `
 const CommentTitle = styled.h2`
@@ -329,33 +368,29 @@ width:80%;
 `
 const Comment = styled.li`
 display: flex;
-justify-content: space-between;
+margin-bottom: 20px;
+
 `
 const CommentLeftContainer = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-width: 50px;
-height: 50px;
+
+width: 5%;
+
 `
 const UserImage = styled.img`
 display: block;
-width: 80%;
-height: 80%;
+width: 35px;
+height: 35px;
 
 border-radius: 50%;
 `
 const CommentRightSection = styled.div`
 display: flex;
 align-items: center;
-justify-content: center;
+width: 95%;
 `
 const UserName = styled.h4`
-margin-right: 20px;
-width: 10%;
-&::after{
-	content: " : ";
-}
+margin-right: 10px;
+
 `
 const UserComment = styled.p`
 width: 90%;
