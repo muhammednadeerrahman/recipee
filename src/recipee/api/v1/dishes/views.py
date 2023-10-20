@@ -233,3 +233,19 @@ def postLikes(request, id):
             "message" : "oops..! place not found"
         }
         return Response (response_data)
+
+
+# @api_view(["POST"])
+# @permission_classes([AllowAny])
+# def postComment(request, id):
+#     if Dish.objects.filter(pk=id).exists():
+#         instance = Dish.objects.get(pk=id)
+#         comment = request.data["comment"]
+#         username = request.user.firstname
+
+#         Comment.objects.create(
+#             comment = comment,
+#             username = username,
+#             profile_image = profile_image
+
+#         )

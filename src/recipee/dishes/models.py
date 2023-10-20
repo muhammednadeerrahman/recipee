@@ -32,11 +32,29 @@ class Category (models.Model):
     def __str__(self):
         return self.name
     
-# class Profile (models.Model):
-#     name = models.OneToOneField("auth.User",on_delete=models.CASCADE)
-#     phone = models.CharField(max_length=12,blank=True,null=True)
-#     profile_image = models.FileField(upload_to="profile/",blank=True,null=True)
-# class Likes (models.Model):
-#     username = models.ManyToManyField("auth.User")
-#     dish = models.ForeignKey("dishes.Dish",on_delete=models.CASCADE)
+class UserProfile (models.Model):
+    name = models.OneToOneField("auth.User",on_delete=models.CASCADE)
+    phone = models.CharField(max_length=12,blank=True,null=True)
+    profile_image = models.FileField(upload_to="profile/",blank=True,null=True)
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+
+    def __str__(self):
+        return self.phone
+
+
+
+class Comment (models.Model):
+    parent_comment = models.ForeignKey('dishes.Comment',related_name="master_comment",blank=True,null=True,on_delete=models.CASCADE)
+    comment = models.TextField()
+    username = models.ForeignKey("auth.User",on_delete=models.CASCADE)
+    profile_image = models.ForeignKey("dishes.UserProfile",on_delete=models.CASCADE)
+    dish = models.ForeignKey("dishes.Dish",on_delete=models.CASCADE)    
+    is_deleted = models.BooleanField(default=False)
+    date = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+
+    def __str__(self):
+        return self.comment
+
+
 
