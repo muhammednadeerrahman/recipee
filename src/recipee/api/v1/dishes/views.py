@@ -248,8 +248,6 @@ def postComment(request, id):
         except:
             parent_comment = None
 
-        
-
         Comment.objects.create(
             comment = comment,
             username = username,
@@ -279,6 +277,7 @@ def postComment(request, id):
 def listComment(request, id):
     if Dish.objects.filter(pk=id).exists():
         dish = Dish.objects.get(pk=id)
+
         instance= Comment.objects.filter(dish=dish,parent_comment = None)
         context = {
             "request" : request
@@ -301,4 +300,36 @@ def listComment(request, id):
     
 
         
-    
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def profile(request):
+    name = request.user
+    phone = request.data["phone"]
+    try: 
+        profile_image = request.data["profile_image"]
+    except:
+        profile_image = None
+
+
+    if request.user :
+        instance = UserProfile.objects.create(
+            name = name,
+            phone = phone
+
+        )
+        if profile_image :
+            instance.profile_image = profile_image
+            instance.save()
+
+        response_data =  {
+                "status_code" : 6000,
+
+                "message" : "userupdated successfully"                                                                                     
+            }
+        return Response(response_data)
+    else:
+        response_data =  {
+            "status_code" : 6001,
+            "message" : "oops..! user not found"
+        }
+        return Response (response_data)

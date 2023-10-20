@@ -79,8 +79,16 @@ class DeleteSerializer(ModelSerializer):
         fields = ("id","is_deleted")
 
 class CommentSerializer(ModelSerializer):
+
+    username = SerializerMethodField()
+
     class Meta :
         model = Comment
-        fields = ("id","profile_image","date","comment","username", "is_deleted","parent_comment")
+        fields = ("id","date","comment","username", "is_deleted",)
 
+    def get_username(self,instance):
+        request = self.context.get("request")
+
+        return instance.username.first_name
+    
 
