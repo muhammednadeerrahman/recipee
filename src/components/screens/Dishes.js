@@ -132,7 +132,9 @@ export default function Dishes() {
 						</ImageContainer>
 						<FoodDetails>
 							<FoodNameContainer>
-								<FoodName>{item.dish_name}</FoodName>
+								<TitleContainer>
+									<FoodName>{item.dish_name}</FoodName>
+								</TitleContainer>
 								<FoodLike>
 								{ (item.is_liked == false) ?
 								 (
@@ -144,8 +146,8 @@ export default function Dishes() {
 								<LikeCount >{item.like} Likes</LikeCount>
 								</FoodLike>
 							</FoodNameContainer>
-							<PostedBy>posted By : {item.user_name}</PostedBy>
-							<PostedDate>posted Date : {item.date}</PostedDate>
+							<PostedBy>{item.user_name}</PostedBy>
+							<PostedDate>{item.date}</PostedDate>
 						</FoodDetails>
 					</DishItem>
 			
@@ -191,7 +193,7 @@ export default function Dishes() {
 				</LeftSectionDishes>
 				<RightSectionDishes>
 					<SectionCategories>
-						<CategoryTitle>Categories</CategoryTitle>
+						<CategoryTitle>Filter</CategoryTitle>
 						<CategoryLists>
 							{category.map((categories)=>(
 								<Category  key={categories.id}>											
@@ -219,6 +221,12 @@ export default function Dishes() {
 
 const MainContainer = styled.div`
 padding: 80px 0 0;
+@media (max-width:640px) {
+	padding: 60px 0 0;
+
+
+  
+}
 `
 const DisplaySection = styled.div`
 border-bottom: 4px solid #ffaa11;
@@ -230,6 +238,22 @@ background-size:contain;
 background-position:right 0 top 0;
 display: flex;
 background-color: #eef0f4;
+@media (max-width:1280px) {
+	height: 200px;
+  
+}
+@media (max-width:980px) {
+	height: 150px;
+  
+}
+@media (max-width:640px) {
+	height: 115px;
+	border-bottom: 2px solid #ffaa11;
+}
+@media (max-width:480px) {
+	display: none;
+
+}
 `
 const DisplayTitle = styled.h1`
 color: #381a5a;
@@ -239,18 +263,33 @@ padding-top: 50px;
 display: inline-block;
 height: 40px;
 font-weight: 900;
+@media (max-width:980px) {
+	display: none;
+  
+}
 `
 const SectionDishes = styled.div`
 flex-direction:row-reverse;
 display: flex;
 justify-content: space-between;
+@media (max-width:640px) {
+	flex-direction:column-reverse;
+}
 `
 const LeftSectionDishes = styled.div`
 display: flex;
 justify-content: space-between;
 flex-wrap: wrap;
-width:80%;
+width:75%;
 padding: 20px 50px;
+@media (max-width:768px) {
+	padding: 15px 15px;
+}
+@media (max-width:640px) {
+	width:100%;
+	justify-content: center;
+
+}
 
 `
 
@@ -258,31 +297,105 @@ const DishItem = styled.div`
 width: 30%;
 margin-top: 30px;
 padding: 20px;
-
+@media (max-width:1080px) {
+	width: 33%;
+	margin-top: 20px;
+  
+}
+@media (max-width:980px) {
+	width: 48%;
+	margin-top: 20px;
+  
+}
+@media (max-width:640px) {
+	width: 90%;
+}
+@media (max-width:360px) {
+	margin-top: 10px;
+}
 `
 const ImageContainer = styled.div`
 width: 100%;
 height: 170px;
+
+@media (max-width:1280px) {
+	height: 150px;
+  
+}
+@media (max-width:1080px) {
+	height: 140px;
+  
+}
+@media (max-width:640px) {
+	height: 250px;
+	margin-bottom: 20px;
+  
+}
+@media (max-width:480px) {
+	height: 200px;
+
+  
+}
+@media (max-width:360px) {
+	margin-bottom: 10px;
+}
 `
 const DishImage = styled.img`
 width: 100%;
-height: 170px;
+height: 100%;
 display: inline-block;
 border-radius: 8px;
 cursor:pointer;
 `
-const FoodDetails = styled.div``
+const FoodDetails = styled.div`
+
+
+`
 const FoodNameContainer = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
+flex-direction: column-reverse;
+@media (max-width:1280px) {
+	height: 45px}
+
 `
-const FoodName = styled.h3``
+
+const TitleContainer = styled.div`
+align-items: left;
+width: 100%;
+@media (max-width:1080px) {
+
+}
+`
+
+const FoodName = styled.h3`
+font-size: 18px;
+text-align: left;
+@media (max-width:1280px) {
+	font-size: 14px;
+}
+@media (max-width:1080px) {
+	font-size: 12px;
+
+}
+@media (max-width:640px) {
+	font-size: 16px;
+
+}
+`
 
 
 const FoodLike = styled.div`
 display: flex;
-margin: 25px 0 ;
+align-items: end;
+margin: 10px 25px ;
+width: 100%;
+justify-content: flex-end;
+
+@media (max-width:360px) {
+	margin: 5px 5px ;
+}
 `
 const LikeLink = styled(Link)`
 display: flex;
@@ -290,6 +403,9 @@ justify-content: center;
 align-items: center;
 width: 20px;
 margin-right: 10px;
+@media (max-width:1280px) {
+	width: 15px;
+}
 `
 const LikeImage = styled.img`
 display: block;
@@ -298,22 +414,69 @@ cursor: pointer;
 `
 const LikeCount = styled.div`
 font-size: 12px;
+@media (max-width:1280px) {
+	font-size: 8px;
+
+}
 `
 const PostedBy = styled.h3`
-font-size: 16px;
+font-size: 14px;
 text-align: left;
+@media (max-width:1280px) {
+	font-size: 12px;
+	margin-bottom: 10px;
+}
+@media (max-width:1080px) {
+	font-size: 10px;
+	margin-bottom: 5px;
+}
+@media (max-width:640px) {
+	font-size: 14px;
+}
+@media (max-width:360px) {
+	font-size: 12px;
+
+}
 `
-const PostedDate = styled.h4`
-font-size: 16px;
+const PostedDate = styled.h3`
+font-size: 14px;
 text-align: left;
+@media (max-width:1280px) {
+	font-size: 12px;
+}
+@media (max-width:1280px) {
+	font-size: 10px;
+}
+@media (max-width:640px) {
+	font-size: 14px;
 
+}
+@media (max-width:360px) {
+	font-size: 12px;
 
+}
 `
 const RightSectionDishes = styled.div`
 background-color: #381a5a;
-width: 20%;
+width: 25%;
 padding: 35px 30px;
 border-right: 4px solid #ffaa11;
+min-height: 100vh;
+@media (max-width:768px){
+	padding: 20px 10px;
+
+}
+@media (max-width:640px) {
+	width:100%;
+	min-height: 0;
+	border: 2px solid #ffaa11;
+	border-top: 0;
+	padding: 10px;
+
+
+
+}
+
 `
 
 const SectionCategories = styled.div`
@@ -323,22 +486,60 @@ const CategoryTitle = styled.h1`
 margin-bottom: 30px;
 text-align: left;
 color: #fff;
+font-style: italic;
+@media (max-width:1280px){
+    font-size: 23px;
+}
+@media (max-width:768px){
+    font-size: 19px;
+
+}
+@media (max-width:640px){
+	margin-bottom: 10px;
+
+}
 `
 const CategoryLists = styled.ul`
 display: flex;
 align-items: start;
 justify-content: start;
 flex-direction: column;
+@media (max-width:640px) {
+	flex-direction: row;
+	flex-wrap: wrap;
+}
 `
 const Category = styled.li`
 margin-bottom: 20px;
+@media (max-width:640px) {
+	width: 30%;
+	margin-bottom: 10px;
+
+}
 `
 const CategoryCheckBox = styled.input`
+
+@media (max-width:640px){
+	width: 10px;
+	height: 10px;
+
+
+}
 
 `
 const CategoryLabel = styled.label`
 color: #fff;
 font-size: 20px;
+font-style:italic;
+margin-left:15px;
+@media (max-width:1280px){
+    font-size: 15px;
+
+}
+@media (max-width:640px){
+    font-size: 12px;
+
+}
 `
 const SectionFilter = styled.div`
 

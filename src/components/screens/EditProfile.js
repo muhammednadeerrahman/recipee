@@ -5,11 +5,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { userContext } from '../../App'
 
-export default function Profile() {
+export default function EditProfile() {
 
-    const [userDetails, setUserDetails] = useState([])
     const [profileImage, setProfileImage] = useState(null)
+    const [Image, setImage] = useState(null)
     const [phone, setPhone] = useState("")
+    const [email, setEmail] = useState("")
+    const [name, setName] = useState("")
 
     const {userdata,updateUserData} = useContext(userContext)
 
@@ -24,7 +26,11 @@ export default function Profile() {
     })
     .then(function(response){
             console.log(response.data.data)
-            setUserDetails(response.data.data)
+            setEmail(response.data.data.name)
+            setName(response.data.data.email)
+            setImage(response.data.data.profile_image)
+            setPhone(response.data.data.phone)
+
         })
     .catch(function(error) {
         console.log(error)
@@ -41,6 +47,9 @@ export default function Profile() {
         if(profileImage !== null){
             formField.append('profile_image',profileImage)
         }
+        console.log('phone:', phone);
+        console.log('profileImage:', profileImage);
+        console.log('formField:', formField);
         axios({
             method : "post",
             url: "http://127.0.0.1:8018/api/v1/dishes/profile/",
@@ -60,6 +69,7 @@ export default function Profile() {
 
     }
 
+
   return (
     <>
         <Header/>
@@ -68,52 +78,34 @@ export default function Profile() {
                 <SectionTop>
                     <SectionImageContainer>
 
-                        { (userDetails.profile_image !== null) ? (
-                            <ProfileImage src={userDetails.profile_image}alt="profileIMage"/>)
+                        { (Image !== null) ? (
+                            <ProfileImage src={Image}alt="profileIMage"/>)
                             :(
-                             <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
+                                <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
+                             
                         )}                    
                     </SectionImageContainer>
-                    { (userDetails.profile_image !== null) ? (
-                        <SectionChangeImage to="/profile/edit">
-                            <ChangeImageTitle>change profile image</ChangeImageTitle>
-                            <ImageEditContainer>
-                                <EditImage src={require("../images/edit.svg").default} alt="editPencil image" />
-                            </ImageEditContainer>
-                        </SectionChangeImage>)
-                    :(
                         <SectionChange>
-                        <ImageInputContainer>
-                            <Imageinput type="file" accept='image' onChange={(e)=>setProfileImage(e.target.files[0])} />
-                        </ImageInputContainer>
+
+                                 <ImageInputContainer>
+                                    <Imageinput type="file" accept='image' onChange={(e)=>setProfileImage(e.target.files[0])} />
+                                </ImageInputContainer>
+
+                           
                         </SectionChange>
-                     )
-                    }
-                   
                 </SectionTop>
                 <SectionBottom>
                     <DetailContainer>
                         <Title>Name : </Title>
-                        <Detail>{userDetails.name}</Detail>
+                        <Detail>{name}</Detail>
                     </DetailContainer>
                     <DetailContainer>
                         <Title>Email : </Title>
-                        <Detail>{userDetails.email}</Detail>
+                        <Detail>{email}</Detail>
                     </DetailContainer>
                     <DetailContainer>
                         <Title>Mobile : </Title>
-                        {userDetails.phone ? 
-                            (<Detail>{userDetails.phone}</Detail>)
-                            :(<DetailInput placeholder value={phone} onChange={(e)=>setPhone(e.target.value)} />)
-                        }       
-                        
-                       {userDetails.phone ?
-                        (<EditImageContainer to="/profile/edit" >
-                            <Edit src={require("../images/edit.svg").default} alt= "Edit" />
-                         </EditImageContainer>)
-                        :(<>
-                            
-                        </>)}
+                            <DetailInput placeholder value={phone} onChange={(e)=>setPhone(e.target.value)} />
                     </DetailContainer>
                 </SectionBottom>
                 <SectionSubmit>
@@ -173,10 +165,13 @@ border-bottom: 2px solid #ffbe4b;
 const SectionImageContainer = styled.div`
 border:4px solid #4f5757 ;
 width: 100%;
-height: 213px;
+height: 213px ;
 @media (max-width:1280px){
     height: 170px;
+
+
 }
+
 `
 const ProfileImage = styled.img`
 width: 100%;
@@ -232,15 +227,15 @@ text-transform: capitalize;
 background-color: #eee;
 @media (max-width:1280px){
     font-size: 16px;
-
 }
 @media (max-width:480px){
     font-size: 12px;
     width: 30%;
 }
+
+
 `
 const Detail = styled.h3`
-
 text-align: left;
 margin-left: 10px;
 padding: 10px;
@@ -255,7 +250,7 @@ display: inline-block;
 }
 @media (max-width:480px){
     font-size: 12px;
-     width: calc(70%-20px);
+     width: 70%;
 
 }
 
@@ -314,5 +309,3 @@ const SubmitButton = styled.button`
     font-weight: 600;
     border: none;
 `
-
-

@@ -15,6 +15,8 @@ import Delete from "./components/screens/Delete";
 import Edit from "./components/screens/Edit";
 import Favourite from "./components/screens/Favourite";
 import Search from "./components/screens/Search";
+import EditProfile from "./components/screens/EditProfile";
+import NoPage from "./components/screens/NoPage";
 
 export const userContext = React.createContext()
 
@@ -58,10 +60,12 @@ function App() {
               <Route path="/mypost" element={<Mypost/>} />
               <Route path="/createpost" element={<Createpost/>} />
               <Route path="/profile" element={<Profile/>} />
+              <Route path="/profile/edit" element={<EditProfile/>} />
               <Route path="/edit/:id/" element={<Edit/>} />
               <Route path="/delete/:id/"  element={<Delete/>} />
               <Route path="/favourite"  element={<Favourite/>} />
               <Route path="/:q/"  element={<Search/>} />
+              <Route path="*"  element={<NoPage/>} />
 
             </Routes>
         </Router>

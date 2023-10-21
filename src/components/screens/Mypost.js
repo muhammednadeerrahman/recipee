@@ -31,7 +31,7 @@ export default function Mypost() {
 			myposts.map((post)=>(
 				<DishItem  key = {post.id}   >
 					<ImageContainer>
-						<DishImage src={post.featured_image} alt="food" />
+						<DishImage onClick={()=> navigate(`/dish/${post.id}`) } src={post.featured_image} alt="food" />
 					</ImageContainer>
 					<FoodDetails>
 						<FoodNameContainer>
@@ -139,6 +139,10 @@ export default function Mypost() {
 
 const SectionMyPost = styled.div`
 padding: 130px 60px;
+@media (max-width:640px){
+	padding: 80px 30px;
+
+}
 `
 const SectionTop = styled.div``
 const PostNumber = styled.div`
@@ -146,11 +150,22 @@ display: flex;
 `
 const PostNoTitle = styled.h3`
 margin-right: 10px;
+@media (max-width:640px){
+	font-size: 16px;
+}
 `
-const PostNo = styled.h3``
+const PostNo = styled.h3`
+@media (max-width:640px){
+	font-size: 16px;
+}
+`
 const SectionBottom = styled.div`
 display: flex;
 flex-wrap: wrap;
+@media (max-width:1080px){
+	justify-content: space-between;
+
+}
 `
 const DishItem = styled.div`
 width: 30%;
@@ -161,10 +176,39 @@ align-items: center;
 display: flex;
 justify-content: center;
 flex-direction: column;
+@media (max-width:1080px){
+	margin: 20px 20px 0 0;
+
+}
+@media (max-width:980px){
+	width: 50%;
+	margin: 20px 0;
+
+}
+@media (max-width:640px){
+	width: 90%;
+	margin: 30px 0 15px;
+	padding: 5px;
+}
+@media (max-width:360px){
+	width: 100%;
+	margin: 30px 0 15px;
+	padding: 5px;
+}
 `
 const ImageContainer = styled.div`
 width: 90%;
 height: 200px;
+@media (max-width:1280px){
+height: 170px;
+
+}
+@media (max-width:640px){
+	width: 100%;
+	height: 220px;
+
+
+}
 `
 const DishImage = styled.img`
 width: 100%;
@@ -179,13 +223,28 @@ const FoodNameContainer = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
+flex-direction: column-reverse;
 `
-const FoodName = styled.h3``
+const FoodName = styled.h3`
+width: 100%;
+font-size: 16px;
+@media (max-width:1280px){
+	font-size: 14px;
+
+}
+@media (max-width:640px){
+	font-size: 16px;
+
+}
+`
 
 
 const FoodLike = styled.div`
 display: flex;
-margin: 25px 0 ;
+margin: 10px 0 ;
+width: 100%;
+justify-content: flex-end;
+
 `
 const LikeLink = styled(Link)`
 display: flex;
@@ -194,18 +253,30 @@ align-items: center;
 width: 20px;
 margin-right: 10px;
 cursor: pointer;
+@media (max-width:1080px){
+	width: 15px;
+}
 `
 const LikeImage = styled.img`
 display: block;
 width: 100%;
 cursor: pointer;
 `
-const LikeCount = styled.div`
+const LikeCount = styled.h6`
 font-size: 12px;
+@media (max-width:1080px){
+	font-size: 10px;
+	font-weight: 500;
+}
+
 `
 const PostedDate = styled.h4`
 font-size: 16px;
 text-align: left;
+@media (max-width:1280px){
+	font-size: 12px;
+
+}
 `
 const PostChange = styled.div`
 display: flex;
@@ -228,16 +299,28 @@ const EditImageContanier = styled.span`
 	align-items: center;
 	width: 20px;
 	padding: 5px;
+@media (max-width:1280px){
+	width: 15px;
+
+}
 
 `
 const EditImage = styled.img`
 width: 15px;
 display: block;
+@media (max-width:1280px){
+	width: 12px;
+
+}
 `
 const EditTitle = styled.h5`
 color:#fff;
 font-weight: 300;
 font-size: 10px;
+@media (max-width:1280px){
+	font-size: 8px;
+
+}
 `
 
 const DeletePost = styled(EditPost)`

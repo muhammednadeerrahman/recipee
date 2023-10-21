@@ -51,7 +51,7 @@ export default function Edit() {
         return(
             category.map((categories)=>(
                 <>
-                <li key={categories.id}>
+                <CategoryContainer key={categories.id}>
                     <CategoryLabel >{categories.name}</CategoryLabel>
                         <CategoryInput
                             type="checkbox"
@@ -60,7 +60,7 @@ export default function Edit() {
                             checked={selectedCategories.includes(categories.id)}
                             onChange={handleCheckboxChange}
                         />
-                </li>
+                </CategoryContainer>
                 </>
             ))
         )
@@ -133,15 +133,15 @@ export default function Edit() {
                 </TitleContainer>
                 <TitleContainer>
                     <CategoryTitle>Category</CategoryTitle>
-                    <ul>
+                    <CategoryList>
                         {categoryList()}
 
-                    </ul>
+                    </CategoryList>
 
                 </TitleContainer>
                 <TitleContainer>
                     <ImageTitle>Image</ImageTitle>
-                    <img src={data.featured_image} />
+                    <Image src={data.featured_image} />
                     <ImageInput 
                         type='file' 
                         name= "featured_image"
@@ -166,19 +166,32 @@ export default function Edit() {
 }
 
 
+
 const CreatePage = styled.div`
 padding: 130px 100px;
 background-color: #381a5a;
+@media (max-width:768px) {
+    padding: 130px 45px;
+}
+@media (max-width:480px) {
+    padding: 80px 20px 20px;
+    
+}
 `
 const CreatePostForm = styled.form`
 background-color: #ffaa11;
 padding: 50px;
 border-radius: 12px;
+@media (max-width:480px) {
+    padding: 10px;
+    
+}
 `
 const TitleContainer = styled.div`
 display: flex;
 flex-direction: column;
 margin-bottom: 20px;
+
 
 `
 const DishTitle = styled.label`
@@ -186,6 +199,9 @@ margin-bottom: 20px;
 text-align: left;
 font-weight: 700;
 font-size: 28px;
+@media (max-width:640px) {
+    font-size: 20px;
+}
 
 `
 const DishTitleInput = styled.input`
@@ -198,13 +214,75 @@ outline: none;
 `
 
 
-const CategoryTitle = styled(DishTitle)``
-const CategoryLabel = styled.label`
-color:black;
-`
-const CategoryInput = styled.input``
+const CategoryTitle = styled(DishTitle)`
 
+`
+const CategoryList = styled.ul`
+display: flex;
+flex-wrap: wrap;
+@media (max-width:980px) {
+	justify-content: space-between;
+}
+
+
+
+`
+const CategoryContainer = styled.li`
+margin-right:30px;
+@media (max-width:980px) {
+    margin-right:0;
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+}
+@media (max-width:640px) {
+    margin-bottom: 20px;
+}
+
+`
+
+const CategoryLabel = styled.label`
+margin-right: 10px;
+color:black;
+font-size: 20px;
+font-weight: bold;
+cursor:pointer;
+@media (max-width:980px) {
+    font-size: 16px;
+
+}
+@media (max-width:640px) {
+    font-size: 12px;
+
+}
+`
+const CategoryInput = styled.input`
+@media (max-width:640px) {
+    width: 15px;
+    height: 15px;
+
+}
+`
 const ImageTitle = styled(DishTitle)``
+const Image = styled.img`
+display: block;
+width: 300px ;
+height: 300px ;
+margin-bottom: 20px;
+@media (max-width:1280px){
+    height: 250px;
+    width: 250px ;
+}
+@media (max-width:980px) {
+    height: 200px;
+    width: 220px ;
+}
+@media (max-width:640px) {
+    height: 150px;
+    width: 200px ;
+}
+`
+
 const ImageInput = styled(DishTitleInput)``
 
 const IngredientTitle = styled(DishTitle)``

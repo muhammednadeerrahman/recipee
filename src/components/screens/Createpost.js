@@ -161,16 +161,28 @@ export default function Createpost() {
 const CreatePage = styled.div`
 padding: 130px 100px;
 background-color: #381a5a;
+@media (max-width:768px) {
+    padding: 130px 45px;
+}
+@media (max-width:480px) {
+    padding: 80px 20px;
+    
+}
 `
 const CreatePostForm = styled.form`
 background-color: #ffaa11;
 padding: 50px;
 border-radius: 12px;
+@media (max-width:480px) {
+    padding: 10px;
+    
+}
 `
 const TitleContainer = styled.div`
 display: flex;
 flex-direction: column;
 margin-bottom: 20px;
+
 
 `
 const DishTitle = styled.label`
@@ -178,6 +190,9 @@ margin-bottom: 20px;
 text-align: left;
 font-weight: 700;
 font-size: 28px;
+@media (max-width:640px) {
+    font-size: 20px;
+}
 
 `
 const DishTitleInput = styled.input`
@@ -196,12 +211,24 @@ const CategoryTitle = styled(DishTitle)`
 const CategoryList = styled.ul`
 display: flex;
 flex-wrap: wrap;
+@media (max-width:980px) {
+	justify-content: space-between;
+}
 
 
 
 `
 const CategoryContainer = styled.li`
 margin-right:30px;
+@media (max-width:980px) {
+    margin-right:0;
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+}
+@media (max-width:640px) {
+    margin-bottom: 20px;
+}
 
 `
 
@@ -211,8 +238,22 @@ color:black;
 font-size: 20px;
 font-weight: bold;
 cursor:pointer;
+@media (max-width:980px) {
+    font-size: 16px;
+
+}
+@media (max-width:640px) {
+    font-size: 12px;
+
+}
 `
-const CategoryInput = styled.input``
+const CategoryInput = styled.input`
+@media (max-width:640px) {
+    width: 15px;
+    height: 15px;
+
+}
+`
 
 const ImageTitle = styled(DishTitle)``
 const ImageInput = styled(DishTitleInput)``

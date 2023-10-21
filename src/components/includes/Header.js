@@ -159,11 +159,29 @@ align-items: center;
 padding: 0 30px;
 height:80px;
 width: 100%;
+@media (max-width: 640px){  
+    padding: 0 15px;
+    height:60px;
+    }
+@media (max-width: 480px){  
+    padding: 0 5px;
+
+
+    }
+@media (max-width: 360px){  
+    padding: 0 10px;
+
+
+    }
 `
 const SectionLeft = styled.div`
 width: 20%;
 display: flex;
 align-items: center;
+@media (max-width: 360px){  
+    width: 30%;
+
+    }
 `
 const SectionNav = styled.div`
 display: flex;
@@ -175,6 +193,21 @@ align-items: center;
 const SectionNavLink = styled(Link)`
 display: block;
 width: 30px;
+@media (max-width:980px) {
+    width: 25px;
+    }
+@media (max-width: 768px){  
+    width: 20px;
+
+    }
+@media (max-width: 640px){  
+    width: 20px;
+
+    }
+@media (max-width: 360px){  
+    width: 18px;
+
+    }
 `
 const NavImage = styled.img`
 display: block;
@@ -185,7 +218,25 @@ width: 170px;
 height: 90px;
 display: flex;
 align-items: center;
+@media (max-width:980px) {
+    width: 120px;
+    height: 74px;
+    }
+@media (max-width: 768px){  
+    width: 90px;
+    height: 55px;
+    }
+@media (max-width: 640px){  
+    width: 70px;
+    height: 44px;
+    }
+@media (max-width: 360px){  
+    width: 65px;
+    height: 40px;
+    }
+
 `
+
 const SectionHighlight = styled.h1`
 height: 100%;
 width: 100%;
@@ -208,7 +259,18 @@ width: 55%;
 background-color: #ffbe4b;
 padding: 20px;
 border-radius:10px;
+@media (max-width: 768px){  
+    padding: 18px;
+    width: 50%;
+    }
+@media (max-width: 640px){  
+    padding: 14px;
+    }
+@media (max-width: 480px){  
+    width: 45%;
+    padding: 8px 4px;
 
+    }
 `
 const SectionContainer = styled.div`
 display: flex;
@@ -219,6 +281,9 @@ align-items: center;
 const SectionSearchIcon = styled.div`
 width: 15px;
 margin-right: 15px;
+@media (max-width: 480px){  
+   display: none;
+}
 
 `
 const SearchImage = styled.img`
@@ -236,6 +301,10 @@ border: 0px;
 &:focus{
     outline: none;
 }
+@media (max-width:360px) {
+    font-size: 10px;
+
+    }
 
 `
 const SectionRight = styled.div`
@@ -243,6 +312,25 @@ width: 15%;
 display: flex;
 align-items: center;
 margin-left: 20px;
+@media (max-width:1280px) {
+    width: 20%;
+
+    }
+@media (max-width:980px) {
+    width: 25%;
+
+    }
+@media (max-width:768px) {
+    margin-left: 5px;
+    width: 30%;
+
+    }
+@media (max-width:640px) {
+
+
+    }
+
+
 `
 const NavList = styled.div`
 display: flex;
@@ -252,6 +340,30 @@ const NavImageContainer = styled(Link)`
 display: block;
 width: 30px;
 margin-left: 30px;
+@media (max-width:1280px) {
+    margin-left: 20px;
+    width: 25px;
+    }
+@media (max-width: 768px){  
+    width: 22px;
+    }
+@media (max-width: 640px){  
+    margin-left: 10px;
+    width: 20px;
+
+    }
+@media (max-width: 480px){  
+    margin-left: 10px;
+    width: 18px;
+
+    }
+@media (max-width:360px){  
+&:first-child{
+    margin-left: 5px;
+
+}
+
+    }
 `
 const NavImages = styled.img`
 display: block;
@@ -263,6 +375,16 @@ font-size: 20px;
 font-weight: 700;
 display: block;
 color: #381a5a;
+@media (max-width:1280px) {
+    font-size: 16px;
+
+    }
+@media (max-width:640px) {
+    font-size: 12px;
+    }
+@media (max-width:480px) {
+    margin-left: 20px;
+    }
 
 `
 const SignupButton = styled(Link)`
@@ -273,6 +395,19 @@ font-weight: 600;
 border-radius: 10px;
 display: block;
 color: #ffaa11 ;
+@media (max-width:1280px) {
+    font-size: 16px;
+    padding: 10px 14px;
+    }
+@media (max-width:640px) {
+    font-size: 13px;
+    padding: 8px 10px;
+    
+
+    }
+@media (max-width:480px) {
+    display: none;
+    }
 
 `
 const SectionMainNav = styled.div`
@@ -291,11 +426,50 @@ align-items: center;
 flex-direction: column;
 width: 30%;
 background-color: white;
+@media (max-width:980px) {
+    width: 40%;
+    }
+@media (max-width:768px) {
+    width: 45%;
+
+    }
+@media (max-width:640px) {
+    width: 60%;
+
+    }
+@media (max-width:480px) {
+    width: 70%;
+
+    }
+@media (max-width:360px) {
+    width: 80%;
+
+    }
 `
 const SectionNavRight = styled.div`
 opacity:.2;
 width: 70%;
 background-color: #6d6969;
+@media (max-width:980px) {
+    width: 60%;
+    }
+@media (max-width:768px) {
+    width: 55%;
+
+    }
+@media (max-width:640px) {
+    width: 40%;
+
+    }
+@media (max-width:480px) {
+    width: 30%;
+
+    }
+@media (max-width:360px) {
+    width: 20%;
+
+    }
+    
 `
 const LogStatus = styled.div`
 display: flex;
@@ -309,6 +483,9 @@ display: inline-block;
 color:#ffaa11;
 font-weight: 600;
 font-size: 20px;
+@media (max-width:768px) {
+    font-size: 17px;
+    }
 `
 
 const SectionNavTop = styled.div`
@@ -317,6 +494,9 @@ display: flex;
 align-items: center;
 justify-content: center;
 flex-direction: column;
+@media (max-width:980px) {
+    margin-top: 30px;
+    }
 `
 const ProfileImageContainer = styled.div`
 width:150px;
@@ -349,6 +529,9 @@ font-weight: 600;
 font-size: 20px;
 text-align: center;
 color: #ffaa11;
+@media (max-width:980px) {
+    font-size: 17px;
+    }
 `
 const ProfileEmail = styled.h2`
 color: #686868;
@@ -356,6 +539,9 @@ font-weight: 600;
 font-size: 20px;
 text-align: center;
 margin: 10px 0 20px;
+@media (max-width:980px) {
+    font-size: 17px;
+    }
 
 `
 const SectionProfile = styled.div`
@@ -372,6 +558,10 @@ const ProfileLink = styled(Link)`
     padding: 10px 16px;
     font-size: 20px;
     font-weight: 600;
+    @media (max-width:980px) {
+        padding: 8px 12px;
+        font-size: 16px;
+    }
 `
 const SectionNavBottom = styled.div`
 width: 90%;
@@ -388,13 +578,18 @@ justify-content: space-between;
 align-items: center;
 padding: 20px;
 color: #ffaa11;
-
-
+@media (max-width:980px) {
+        padding: 16px ;
+    }
 `
 const TitleSpan = styled.span`
 font-size: 16px;
 font-weight: 600;
 display: block;
+@media (max-width:980px) {
+    font-size: 14px;
+
+    }
 `
 const SliderImage = styled.img`
 display: block;
