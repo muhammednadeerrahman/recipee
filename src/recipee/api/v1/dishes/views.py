@@ -39,7 +39,7 @@ def dishes(request):
 
 
 @api_view(["GET"])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def recipee(request, id):
     if Dish.objects.filter(pk=id).exists():    
         instance = Dish.objects.get(pk=id)
@@ -104,6 +104,17 @@ def create(request):
     return Response (response_data)
 
 
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_user_profile(request):
+
+    if request.user:
+        user_profile, created = UserProfile.objects.get_or_create(name=request.user)
+
+        return Response({"message": "UserProfile created successfully"}, status=200)
+    else:
+        return Response({"message": "User not found"}, status=400)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -337,44 +348,7 @@ def profile(request):
                                 
             return Response(response_data)
 
-        # name = request.user
-        # phone = request.data["phone"]
-        # try: 
-        #     profile_image = request.data["profile_image"]
-        # except:
-        #     profile_image = None
-
-        # try: 
-        #     phone = request.data["phone"]
-        # except:
-        #     phone = None
-
-        # if request.user :
-        #     instance = UserProfile.objects.create(
-        #         name = name,
-
-        #     )
-        #     if phone :
-        #         instance.phone = phone
-        #         instance.save()
-
-        #     if profile_image :
-        #         instance.profile_image = profile_image
-        #         instance.save()
-
-        #     response_data =  {
-        #             "status_code" : 6000,
-
-        #             "message" : "userupdated successfully"                                                                                     
-        #         }
-        #     return Response(response_data)
-        # else:
-        #     response_data =  {
-        #         "status_code" : 6001,
-        #         "message" : "oops..! user not found"
-        #     }
-        #     return Response (response_data)
-
+    
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

@@ -19,20 +19,17 @@ def create(request):
     
 
     if not User.objects.filter(username=email).exists():
-        User.objects.create_user(
+        new_user= User.objects.create_user(
             username = email,
             first_name = name,
             password = password
         )
-        UserProfile.objects.create(
-            name = request.user,
-
-        )
-
+        UserProfile.objects.create(name=new_user)
 
         headers= {
             "Content-Type" : "application/json"
         }
+        
 
 
         protocol = "http://"
