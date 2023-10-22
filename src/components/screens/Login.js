@@ -39,7 +39,7 @@ export default function () {
            let  {data} = response;
             localStorage.setItem("user_data",JSON.stringify(data));
             updateUserData ({type : "LOGIN", payload : data});
-           if (nextpath ){navigate(nextpath)}else {navigate("/")}
+            if (nextpath ){navigate(nextpath)}else {navigate("/")}
         })
         .catch((error)=>{
             console.log(error.message)

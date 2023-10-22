@@ -12,7 +12,6 @@ export default function Search() {
     const [isNav,setIsNav] = useState(false)
 	const [dishes , setDishes] = useState([])
 	const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState("")
 	const [selectedCategories, setSelectedCategories] = useState([]);
     const [category, setCategory] = useState([])
 
@@ -22,57 +21,87 @@ export default function Search() {
 
 	const navigate = useNavigate()
 
-	useEffect(()=>{
-		const categoryFilter = selectedCategories.join(',');
+    useEffect(()=>{
 
-		axios.get(`http://127.0.0.1:8018/api/v1/dishes/`,
-		{   params: { 
-            q: q ,
-            filter : categoryFilter
-        },
-            headers : {
-			Authorization : `Bearer ${userdata?.access}`,
-		},
-	})
-		.then(function(response){
-			console.log(response.data.data)
-			setDishes(response.data.data)
+            if (userdata?.access) {
+				const categoryFilter = selectedCategories.join(',');
+				navigate(`?filter=${categoryFilter}`);
+                axios.get(`http://127.0.0.1:8018/api/v1/dishes/`,
+                {   params: { 
+                    q: q ,
+                    filter : categoryFilter
+                },
+                    headers : {
+                    Authorization : `Bearer ${userdata?.access}`,
+                },
+                })
+                .then(function(response){
+                    console.log(response.data.data)
+                    setDishes(response.data.data)
+        
+        
+                })
+                .catch(function(error){
+                    console.log(error)
+                })
+        } else {
+            const categoryFilter = selectedCategories.join(',');
+            navigate(`?filter=${categoryFilter}`);
+            axios.get(`http://127.0.0.1:8018/api/v1/dishes/`,
+            {   params: { 
+                    q: q ,
+                    filter : categoryFilter
+                },
+        
+            })
+            .then(function(response){
+                console.log(response.data.data)
+                setDishes(response.data.data)
+    
+    
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        }
+		
+	  
+    axios.get("http://127.0.0.1:8018/api/v1/dishes/create/get_categories/",)
+    .then(function(response){
+        console.log(response.data)
+        setCategory(response.data)
 
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+    setLoading(false);
+	},[selectedCategories, userdata, q])
 
-		})
-		.catch(function(error){
-			console.log(error)
-		})
+    let handleLike = (id) => {
 
-        axios.get("http://127.0.0.1:8018/api/v1/dishes/create/get_categories/",
+		console.log(id)
+		axios.post(`http://127.0.0.1:8018/api/v1/dishes/likes/${id}/`,{},
 		{headers : {
 			Authorization : `Bearer ${userdata?.access}`,
 		},
 	})
 		.then(function(response){
 			console.log(response.data)
-			setCategory(response.data)
-
+			axios.get("http://127.0.0.1:8018/api/v1/dishes/",
+			{headers : {
+				Authorization : `Bearer ${userdata?.access}`,
+			},
 		})
-		.catch(function(error){
+			.then(function(response){
+				console.log(response.data.data)
+				setDishes(response.data.data)
+			})
+		})
+		.catch(function(error) {
 			console.log(error)
-		})
-
-		setLoading(false);
-
-	},[selectedCategories])
-
-	const HeartIcon = ({ isLiked }) => {
-		return (
-		  <div>
-			{isLiked ? (
-			  <img src={require("../images/heart2.png")} alt="Liked" />
-			) : (
-			  <img src={require("../images/heart1.png")} alt="Not Liked" />
-			)}
-		  </div>
-		);
-	  };
+		  });
+	}
 
 	let renderDishes=()=>{
 		return(
@@ -87,14 +116,17 @@ export default function Search() {
 									<FoodName>{item.dish_name}</FoodName>
 								</TitleContainer>
 								<FoodLike>
-									{(item.is_liked == true )?
-									(
-										<LikeLink><LikeImage src={require("../images/heart2.png")} /></LikeLink>
-									):
-									(
-										<LikeLink><LikeImage src={require("../images/heart1.png")} /></LikeLink>
-
-									)}
+                                {(item.is_liked !== null) ? (
+										 (item.is_liked == false) ?
+											(
+											   <LikeLink onClick={()=>handleLike(item.id)} ><LikeImage src={require("../images/heart1.png")} /></LikeLink>
+											):
+											(
+											   <LikeLink onClick={()=>handleLike(item.id)} ><LikeImage src={require("../images/heart2.png")} /></LikeLink>
+											)
+									)
+									:(<LikeLink  ><LikeImage src={require("../images/heart1.png")} /></LikeLink>)
+								}
 									<LikeCount>{item.like} likes</LikeCount>
 								</FoodLike>
 							</FoodNameContainer>

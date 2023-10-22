@@ -13,6 +13,7 @@ export default function Signup() {
 
     const navigate = useNavigate()
     let handleSubmit = (e) =>{
+        setMessage("")
         e.preventDefault()
         axios.post(`http://127.0.0.1:8018/api/v1/auth/create/`,{name,password,email})
         .then((response) =>{
@@ -63,7 +64,7 @@ export default function Signup() {
                     <TextInput type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} />
                 </InputContainer>
                 <LoginButton to="/login">Log in</LoginButton>
-
+                {message && <ErrorMessage>{message}</ErrorMessage>}
                 <ButtonContainer>
                     <SubmitButton>Sign up</SubmitButton>
                 </ButtonContainer>

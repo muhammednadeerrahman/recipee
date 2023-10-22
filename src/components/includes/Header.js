@@ -32,11 +32,17 @@ export default function Header() {
 
     const handleLog = () =>{
         updateUserData({type : "LOGOUT"})
+
     }
 
 	let handleKeyPress = (e)=>{
 		if (e.key == 'Enter'){
-			navigate(`/${search}/`)
+            if (search.length > 0){
+                navigate(`/${search}/`)
+            }else{
+                navigate("/")
+            }
+			
 		}
 	}
     
@@ -106,14 +112,15 @@ export default function Header() {
                     </LogStatus>
                     <SectionNavTop>
                         <ProfileImageContainer>
-                            { (userDetails.profile_image !== null) ? (
-                                <ProfileImage src={userDetails.profile_image}alt="profileIMage"/>
-
-                            ):(
-                                <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
-                            )}
+                            {userdata ?(
+                                 (userDetails.profile_image !== null) ? (
+                                    <ProfileImage src={userDetails.profile_image}alt="profileIMage"/>
+    
+                                ):(
+                                    <ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>
+                                )
+                            ):(<ProfileImage src={require("../images/profile_demo.png") }alt="profileIMage"/>)}
                             
-                           
                         </ProfileImageContainer>
                         <ProfileDetails>
                             <ProfileName>{userDetails.name}</ProfileName>
